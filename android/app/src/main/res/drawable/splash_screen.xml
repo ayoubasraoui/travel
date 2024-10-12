@@ -1,0 +1,8 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@android:color/white"/> <!-- Background color -->
+    <item>
+        <bitmap
+            android:src="@drawable/splash_logo"
+            android:gravity="center"/>
+    </item>
+</layer-list>
