@@ -164,7 +164,7 @@
 //                 ],
 //               ),
 //             ),
-            
+
 //             SizedBox(height: 3),
 //             ElevatedButton(
 //               onPressed: () {
@@ -203,14 +203,11 @@
 //   }
 // }
 
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter2/screens/loginScreen.dart';
 import 'package:flutter2/screens/swipeScreen.dart';
 import 'package:flutter2/services/likes.dart';
+import 'package:flutter2/services/posts.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -352,9 +349,9 @@ class _ProfileState extends State<Profile> {
                     ),
                   ],
                 ),
-                
+
                 SizedBox(height: 20),
-                
+
                 // Profile Image Section
                 Stack(
                   children: [
@@ -388,9 +385,9 @@ class _ProfileState extends State<Profile> {
                     ),
                   ],
                 ),
-                
+
                 SizedBox(height: 16),
-                
+
                 // Profile Info
                 Text(
                   '$userName, $age',
@@ -417,9 +414,9 @@ class _ProfileState extends State<Profile> {
                     color: Colors.white70,
                   ),
                 ),
-                
+
                 SizedBox(height: 32),
-                
+
                 // Settings Cards
                 Container(
                   decoration: BoxDecoration(
@@ -454,9 +451,9 @@ class _ProfileState extends State<Profile> {
                     ],
                   ),
                 ),
-                
+
                 SizedBox(height: 32),
-                
+
                 // Action Buttons
                 Container(
                   decoration: BoxDecoration(
@@ -503,14 +500,25 @@ class _ProfileState extends State<Profile> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              _buildNavButton('assets/icons/profile.png', () => 
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Profile()))),
-              _buildNavButton('assets/icons/location pin.png', () {}),
-              _buildNavButton('assets/icons/plane.png', () => 
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SwiperScreen()))),
+              _buildNavButton(
+                  'assets/icons/profile.png',
+                  () => Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => Profile()))),
+              _buildNavButton(
+                  'assets/icons/location pin.png',
+                  () => Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => SocialFeedScreen()))),
+              _buildNavButton(
+                  'assets/icons/plane.png',
+                  () => Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => SwiperScreen()))),
               _buildNavButton('assets/icons/Chat.png', () {}),
-              _buildNavButton('assets/icons/Love.png', () => 
-                Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LikeScreen()))),
+              _buildNavButton(
+                  'assets/icons/Love.png',
+                  () => Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => LikeScreen()))),
             ],
           ),
         ),
@@ -545,7 +553,7 @@ class _ProfileState extends State<Profile> {
     bool isDangerous = false,
   }) {
     final color = isDangerous ? Colors.red : Color(0xFF084C61);
-    
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
