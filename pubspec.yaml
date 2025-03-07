@@ -87,6 +87,8 @@ flutter:
      - assets/icons/Love.png
      - assets/icons/Chat.png
      - assets/icons/location pin.png
+     - assets/icons/apple.png
+     - assets/icons/google.png
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

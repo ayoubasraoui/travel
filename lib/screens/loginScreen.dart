@@ -51,7 +51,7 @@
 //                   'Email',
 //                   textAlign: TextAlign.left,
 //                 ),
-                
+
 //                 TextField(
 //                   decoration: InputDecoration(
 //                     prefixIcon: Icon(Icons.lock),
@@ -103,7 +103,6 @@
 //     );
 //   }
 // }
-
 
 // class LoginScreen extends StatelessWidget {
 //   @override
@@ -199,9 +198,6 @@
 //     );
 //   }
 // }
-
-
-
 
 // class LoginScreen extends StatelessWidget {
 //   @override
@@ -418,7 +414,6 @@
 //   }
 // }
 
-
 // import 'package:flutter/material.dart';
 
 // class LoginScreen extends StatelessWidget {
@@ -628,7 +623,7 @@
 //                         ],
 //                       ),
 //                     ),
-//                   //  SizedBox(height: 16), 
+//                   //  SizedBox(height: 16),
 //                   ],
 //                 ),
 //               ],
@@ -640,248 +635,425 @@
 //   }
 // }
 
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter2/screens/registerScreen.dart';
 import 'package:flutter2/screens/swipeScreen.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _isPasswordVisible = false;
+  bool _rememberMe = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: <Widget>[
+          // Background Image
           Container(
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/background.jpg'), // Add the path to your image
+                image: AssetImage('assets/background.jpg'),
                 fit: BoxFit.cover,
+                colorFilter: ColorFilter.mode(
+                  Colors.black.withOpacity(0.3),
+                  BlendMode.darken,
+                ),
               ),
             ),
           ),
-          Container(
-            color: Colors.black.withOpacity(0.2),
-          ),
+
+          // Content
           SafeArea(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    SizedBox(height: 15),
+                    SizedBox(height: 20),
+
+                    // Logo Row
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Image.asset(
                           'assets/icons/logo.png',
-                          width: 70, // Adjust size as needed
+                          width: 70,
                         ),
-                        Spacer(),
-                        Image.asset(
-                          'assets/icons/life.jpg',
-                          width: 40, // Adjust size as needed
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 49),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Welcome to TravelMatch",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 40,
-                            fontFamily: 'PlusJakartaSans',
-                            fontWeight: FontWeight.w700,
+                        Container(
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white.withOpacity(0.2),
                           ),
-                        ),
-                        Text(
-                          "Travel and live new adventures",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 15,
-                            fontFamily: 'PlusJakartaSans',
-                            fontWeight: FontWeight.w600,
+                          child: Image.asset(
+                            'assets/icons/life.jpg',
+                            width: 24,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 30),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Email",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontFamily: 'PlusJakartaSans',
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        TextField(
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            hintText: 'Enter your e-mail',
-                            hintStyle: TextStyle(
-                              fontFamily: 'PlusJakartaSans',
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            prefixIcon: Icon(Icons.email),
-                          ),
-                        ),
-                      ],
+
+                    SizedBox(height: 40),
+
+                    // Welcome Text
+                    Text(
+                      "Welcome to\nTravelMatch",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 40,
+                        fontFamily: 'PlusJakartaSans',
+                        fontWeight: FontWeight.w700,
+                        height: 1.2,
+                      ),
                     ),
-                    SizedBox(height: 20),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Password",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontFamily: 'PlusJakartaSans',
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        TextField(
-                          obscureText: true,
-                          decoration: InputDecoration(
-                            filled: true,
-                            fillColor: Colors.white,
-                            hintText: 'Enter your password',
-                            hintStyle: TextStyle(
-                              fontFamily: 'PlusJakartaSans',
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700,
-                            ),
-                            prefixIcon: Icon(Icons.lock),
-                          ),
-                        ),
-                      ],
+                    SizedBox(height: 8),
+                    Text(
+                      "Travel and live new adventures",
+                      style: TextStyle(
+                        color: Colors.white.withOpacity(0.9),
+                        fontSize: 16,
+                        fontFamily: 'PlusJakartaSans',
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                    SizedBox(height: 20),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
+
+                    SizedBox(height: 40),
+
+                    // Email Input
+                    Text(
+                      "Email",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'PlusJakartaSans',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 10,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: TextField(
+                        controller: _emailController,
+                        style: TextStyle(
+                          fontFamily: 'PlusJakartaSans',
+                          fontSize: 16,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: 'Enter your email',
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                            fontFamily: 'PlusJakartaSans',
+                          ),
+                          prefixIcon: Icon(Icons.email_outlined),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 24),
+
+                    // Password Input
+                    Text(
+                      "Password",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontFamily: 'PlusJakartaSans',
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 10,
+                            offset: Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: TextField(
+                        controller: _passwordController,
+                        obscureText: !_isPasswordVisible,
+                        style: TextStyle(
+                          fontFamily: 'PlusJakartaSans',
+                          fontSize: 16,
+                        ),
+                        decoration: InputDecoration(
+                          hintText: 'Enter your password',
+                          hintStyle: TextStyle(
+                            color: Colors.grey,
+                            fontFamily: 'PlusJakartaSans',
+                          ),
+                          prefixIcon: Icon(Icons.lock_outline),
+                          suffixIcon: IconButton(
+                            icon: Icon(
+                              _isPasswordVisible
+                                  ? Icons.visibility_off_outlined
+                                  : Icons.visibility_outlined,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                _isPasswordVisible = !_isPasswordVisible;
+                              });
+                            },
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: BorderSide.none,
+                          ),
+                          filled: true,
+                          fillColor: Colors.white,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 16),
+
+                    // Remember Me & Forgot Password
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context)=> SwiperScreen())
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFF0055FF),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero,
-                            ),
-                            minimumSize: Size(double.infinity, 60),
-                          ),
-                          child: Text(
-                            'Log In',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'PlusJakartaSans',
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(builder: (context)=>RegisterScreen())
-                            );
-                          },
-                          child: Text(
-                            'Create an account',
-                            style: TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'PlusJakartaSans',
-                              color: Color(0xFF0055FF),
-                            ),
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero,
-                            ),
-                            minimumSize: Size(double.infinity, 60),
-                          ),
-                        ),
-                         SizedBox(height: 16),
-                        Center(
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Divider(
-                                      color: Colors.white,
-                                      thickness: 1,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                                    child: Text(
-                                      'Or login with',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                        fontFamily: 'PlusJakartaSans',
-                                      ),
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: Divider(
-                                      color: Colors.white,
-                                      thickness: 1,
-                                    ),
-                                  ),
-                                ],
+                        Row(
+                          children: [
+                            SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: Checkbox(
+                                value: _rememberMe,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _rememberMe = value ?? false;
+                                  });
+                                },
+                                fillColor: MaterialStateProperty.all(
+                                    Color(0xFF0055FF)),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
                               ),
-                              SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Flexible(
-                                    child: IconButton(
-                                      icon: Icon(Icons.facebook),
-                                      iconSize: 40, // Make icons smaller
-                                      onPressed: () {
-                                        // Implement Google login functionality here
-                                      },
-                                    ),
-                                  ),
-                                  SizedBox(width: 20),
-                                  Flexible(
-                                    child: IconButton(
-                                      icon: Icon(Icons.facebook),
-                                      iconSize: 40, // Make icons smaller
-                                      onPressed: () {
-                                        // Implement Facebook login functionality here
-                                      },
-                                    ),
-                                  ),
-                                ],
+                            ),
+                            SizedBox(width: 8),
+                            Text(
+                              'Remember me',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontFamily: 'PlusJakartaSans',
+                              ),
+                            ),
+                          ],
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            // Implement forgot password
+                          },
+                          child: Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontFamily: 'PlusJakartaSans',
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 24),
+
+                    // Login Button
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SwiperScreen()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFF0055FF),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        minimumSize: Size(double.infinity, 56),
+                        elevation: 4,
+                      ),
+                      child: Text(
+                        'Log In',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          fontFamily: 'PlusJakartaSans',
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+
+                    SizedBox(height: 24),
+
+                    // Or login with
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Divider(
+                            color: Colors.white.withOpacity(0.5),
+                            thickness: 1,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 16),
+                          child: Text(
+                            'Or login with',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontFamily: 'PlusJakartaSans',
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Divider(
+                            color: Colors.white.withOpacity(0.5),
+                            thickness: 1,
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 24),
+
+                    // Social Login Buttons
+                    Row(
+                      children: [
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            icon: Icon(
+                              Icons
+                                  .g_mobiledata, // or use Icons.google if available in your Icons
+                              size: 24,
+                              color: Colors.black87,
+                            ),
+                            label: Text(
+                              'Google',
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 14,
+                                fontFamily: 'PlusJakartaSans',
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            onPressed: () {
+                              // Implement Google login
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                              elevation: 4,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 16),
+                        Expanded(
+                          child: ElevatedButton.icon(
+                            icon: Icon(
+                              Icons.apple,
+                              size: 24,
+                              color: Colors.black87,
+                            ),
+                            label: Text(
+                              'Apple',
+                              style: TextStyle(
+                                color: Colors.black87,
+                                fontSize: 14,
+                                fontFamily: 'PlusJakartaSans',
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            onPressed: () {
+                              // Implement Apple login
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.white,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              padding: EdgeInsets.symmetric(vertical: 12),
+                              elevation: 4,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    SizedBox(height: 24),
+
+                    // Create Account Button
+                    Center(
+                      child: TextButton(
+                        onPressed: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => RegisterScreen()),
+                          );
+                        },
+                        child: RichText(
+                          text: TextSpan(
+                            style: TextStyle(
+                              fontFamily: 'PlusJakartaSans',
+                              fontSize: 16,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: "Don't have an account? ",
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.8),
+                                ),
+                              ),
+                              TextSpan(
+                                text: 'Sign Up',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
+
+                    SizedBox(height: 20),
                   ],
                 ),
               ),

@@ -170,9 +170,7 @@
 //   }
 // }
 
-
 // final version ....
-
 
 // import 'package:flutter/material.dart';
 // import 'package:appinio_swiper/appinio_swiper.dart';
@@ -420,14 +418,13 @@
 //   }
 // }
 
-
-
 import 'package:flutter/material.dart';
 import 'package:appinio_swiper/appinio_swiper.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter2/animations/slideup.dart';
 import 'package:flutter2/services/chat.dart';
 import 'package:flutter2/services/filter.dart';
+import 'package:flutter2/services/posts.dart';
 import 'dart:math';
 import 'package:flutter2/services/profile.dart';
 import 'package:flutter2/services/likes.dart';
@@ -436,92 +433,133 @@ class CardView extends StatelessWidget {
   final String image;
   final String name;
   final String age;
+  final String location;
+  final String bio;
+  final List<String> interests;
 
-  CardView({required this.image, required this.name, required this.age});
+  CardView({
+    required this.image,
+    required this.name,
+    required this.age,
+    required this.location,
+    required this.bio,
+    required this.interests,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 20,
-            offset: Offset(0, 10),
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          // Main Image
-          ClipRRect(
-            borderRadius: BorderRadius.circular(24),
-            child: Image.asset(
-              image,
-              fit: BoxFit.cover,
-              height: MediaQuery.of(context).size.height * 0.8,
-              width: double.infinity,
+    return GestureDetector(
+      onTap: () => _showDetailedProfile(context),
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.2),
+              blurRadius: 20,
+              offset: Offset(0, 10),
             ),
-          ),
-          // Gradient overlay for better text readability
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Colors.transparent,
-                  Colors.black.withOpacity(0.8),
-                ],
-                stops: [0.6, 1.0],
+          ],
+        ),
+        child: Stack(
+          children: [
+            // Main Image
+            Hero(
+              tag: 'profile_$name',
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(24),
+                child: Image.asset(
+                  image,
+                  fit: BoxFit.cover,
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  width: double.infinity,
+                ),
               ),
             ),
-          ),
-          // User Info
-          Positioned(
-            bottom: 30,
-            left: 20,
-            right: 20,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      name,
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                    SizedBox(width: 8),
-                    Text(
-                      age,
-                      style: TextStyle(
-                        fontSize: 26,
-                        color: Colors.white.withOpacity(0.9),
-                      ),
-                    ),
+            // Gradient overlay
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24),
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.transparent,
+                    Colors.black.withOpacity(0.8),
                   ],
+                  stops: [0.6, 1.0],
                 ),
-                SizedBox(height: 8),
-                // Travel interests tags
-                Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    _buildInterestTag('Adventure'),
-                    _buildInterestTag('Photography'),
-                    _buildInterestTag('Culture'),
-                  ],
-                ),
-              ],
+              ),
             ),
-          ),
-        ],
+            // User Info
+            Positioned(
+              bottom: 30,
+              left: 20,
+              right: 20,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        name,
+                        style: TextStyle(
+                          fontSize: 28,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontFamily: 'PlusJakartaSans',
+                        ),
+                      ),
+                      SizedBox(width: 8),
+                      Text(
+                        age,
+                        style: TextStyle(
+                          fontSize: 26,
+                          color: Colors.white.withOpacity(0.9),
+                          fontFamily: 'PlusJakartaSans',
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Icon(Icons.location_on, color: Colors.white, size: 16),
+                      SizedBox(width: 4),
+                      Text(
+                        location,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontFamily: 'PlusJakartaSans',
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  Text(
+                    bio,
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.9),
+                      fontSize: 14,
+                      fontFamily: 'PlusJakartaSans',
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 12),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: interests
+                        .map((interest) => _buildInterestTag(interest))
+                        .toList(),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -532,6 +570,7 @@ class CardView extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.2),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white24),
       ),
       child: Text(
         interest,
@@ -539,8 +578,168 @@ class CardView extends StatelessWidget {
           color: Colors.white,
           fontSize: 14,
           fontWeight: FontWeight.w500,
+          fontFamily: 'PlusJakartaSans',
         ),
       ),
+    );
+  }
+
+  void _showDetailedProfile(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) => _buildDetailedProfile(context),
+    );
+  }
+
+  Widget _buildDetailedProfile(BuildContext context) {
+    return DraggableScrollableSheet(
+      initialChildSize: 0.9,
+      minChildSize: 0.5,
+      maxChildSize: 0.95,
+      builder: (context, scrollController) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Color(0xFF084C61),
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: ListView(
+            controller: scrollController,
+            children: [
+              Stack(
+                children: [
+                  // Profile Image
+                  Hero(
+                    tag: 'profile_$name',
+                    child: Container(
+                      height: 400,
+                      width: double.infinity,
+                      child: Image.asset(
+                        image,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  // Close Button
+                  Positioned(
+                    top: 20,
+                    right: 20,
+                    child: IconButton(
+                      icon: Icon(Icons.close, color: Colors.white),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '$name, $age',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                fontFamily: 'PlusJakartaSans',
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Icon(Icons.location_on,
+                                    color: Colors.white, size: 16),
+                                SizedBox(width: 4),
+                                Text(
+                                  location,
+                                  style: TextStyle(
+                                    color: Colors.white70,
+                                    fontSize: 16,
+                                    fontFamily: 'PlusJakartaSans',
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MessagingScreen()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 12),
+                          ),
+                          child: Text(
+                            'Message',
+                            style: TextStyle(
+                              color: Color(0xFF084C61),
+                              fontFamily: 'PlusJakartaSans',
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 24),
+                    Text(
+                      'About',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'PlusJakartaSans',
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      bio,
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                        fontFamily: 'PlusJakartaSans',
+                      ),
+                    ),
+                    SizedBox(height: 24),
+                    Text(
+                      'Interests',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'PlusJakartaSans',
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: interests
+                          .map((interest) => _buildInterestTag(interest))
+                          .toList(),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
@@ -551,30 +750,46 @@ class SwiperScreen extends StatefulWidget {
 }
 
 class _SwiperScreenState extends State<SwiperScreen> {
-  final List<Map<String, String>> profiles = [
+  final List<Map<String, dynamic>> profiles = [
     {
       'image': 'assets/profile1.jpg',
       'name': 'Jane Doe',
       'age': '22',
+      'location': 'New York, USA',
+      'bio':
+          'Adventure seeker and photography enthusiast. Looking for travel buddies to explore new destinations!',
+      'interests': ['Adventure', 'Photography', 'Culture', 'Food', 'Hiking'],
     },
     {
       'image': 'assets/profile2.jpg',
       'name': 'John Smith',
       'age': '28',
+      'location': 'London, UK',
+      'bio':
+          'Travel blogger and coffee addict. Always planning the next adventure!',
+      'interests': ['Coffee', 'Blogging', 'Adventure', 'City Walks'],
     },
     {
       'image': 'assets/profile3.jpg',
       'name': 'Alice Johnson',
       'age': '25',
+      'location': 'Paris, France',
+      'bio':
+          'Art lover and foodie. Seeking companions for museum tours and culinary adventures.',
+      'interests': ['Art', 'Food', 'Museums', 'Wine Tasting'],
     },
     {
       'image': 'assets/profile4.jpg',
       'name': 'Joe Jain',
       'age': '28',
+      'location': 'Mumbai, India',
+      'bio':
+          'Tech nomad working remotely. Love exploring local markets and street food.',
+      'interests': ['Technology', 'Street Food', 'Markets', 'Remote Work'],
     },
   ];
 
-  late List<Map<String, String>> extendedProfiles;
+  late List<Map<String, dynamic>> extendedProfiles;
   final AppinioSwiperController _controller = AppinioSwiperController();
 
   @override
@@ -602,7 +817,7 @@ class _SwiperScreenState extends State<SwiperScreen> {
           children: [
             // Top Bar
             Positioned(
-              top: 35,  // Changed from 50 to 35
+              top: 35,
               left: 16,
               right: 16,
               child: Row(
@@ -645,6 +860,9 @@ class _SwiperScreenState extends State<SwiperScreen> {
                     image: profile['image']!,
                     name: profile['name']!,
                     age: profile['age']!,
+                    location: profile['location']!,
+                    bio: profile['bio']!,
+                    interests: List<String>.from(profile['interests']),
                   );
                 },
               ),
@@ -666,15 +884,36 @@ class _SwiperScreenState extends State<SwiperScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildNavButton('assets/icons/profile.png', () => 
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Profile()))),
-                    _buildNavButton('assets/icons/location pin.png', () {}),
-                    _buildNavButton('assets/icons/plane.png', () => 
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SwiperScreen()))),
-                    _buildNavButton('assets/icons/Chat.png', () =>
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MessagingScreen()))),
-                    _buildNavButton('assets/icons/Love.png', () => 
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LikeScreen()))),
+                    _buildNavButton(
+                        'assets/icons/profile.png',
+                        () => Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => Profile()))),
+                    _buildNavButton(
+                        'assets/icons/location pin.png',
+                        () => Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SocialFeedScreen()))),
+                    _buildNavButton(
+                        'assets/icons/plane.png',
+                        () => Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SwiperScreen()))),
+                    _buildNavButton(
+                        'assets/icons/Chat.png',
+                        () => Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MessagingScreen()))),
+                    _buildNavButton(
+                        'assets/icons/Love.png',
+                        () => Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => LikeScreen()))),
                   ],
                 ),
               ),
@@ -702,15 +941,14 @@ class _SwiperScreenState extends State<SwiperScreen> {
     );
   }
 
-  void _handleSwipe(int previousIndex, int targetIndex, SwiperActivity activity) {
+  void _handleSwipe(
+      int previousIndex, int targetIndex, SwiperActivity activity) {
     if (activity is Swipe) {
-      // Add haptic feedback
       HapticFeedback.mediumImpact();
     }
   }
 
   void _handleEnd() {
-    // Show a "No more profiles" card or refresh
     setState(() {
       extendedProfiles.shuffle(Random());
     });

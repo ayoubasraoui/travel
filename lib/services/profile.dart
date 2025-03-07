@@ -204,6 +204,7 @@
 // }
 
 import 'package:flutter/material.dart';
+import 'package:flutter2/Profile/ProfileSettings.dart';
 import 'package:flutter2/screens/loginScreen.dart';
 import 'package:flutter2/screens/swipeScreen.dart';
 import 'package:flutter2/services/likes.dart';
@@ -426,10 +427,13 @@ class _ProfileState extends State<Profile> {
                   child: Column(
                     children: [
                       _buildSettingsTile(
-                        icon: Icons.person,
-                        title: 'Profile settings',
-                        onTap: () {},
-                      ),
+                          icon: Icons.person,
+                          title: 'Profile settings',
+                          onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      ProfileSettingsScreen()))),
                       Divider(height: 1),
                       _buildSettingsTile(
                         icon: Icons.settings,
