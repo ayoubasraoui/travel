@@ -30,25 +30,17 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF084C61),
-              Color(0xFF063B4D),
-            ],
-          ),
-        ),
-        child: SafeArea(
+      backgroundColor: Color(0xFF181A20),
+      body: SafeArea(
+        child: Container(
+          color: Color(0xFF181A20),
           child: Column(
             children: [
               // Chat Header
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Color(0xFF23242A),
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(20),
                     bottomRight: Radius.circular(20),
@@ -108,7 +100,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
               Container(
                 padding: EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
+                  color: Color(0xFF23242A),
                   borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
                 ),
                 child: Row(
@@ -153,9 +145,7 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
         margin: EdgeInsets.only(bottom: 8),
         padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         decoration: BoxDecoration(
-          color: message['isMe']
-              ? Colors.blue.withOpacity(0.8)
-              : Colors.white.withOpacity(0.1),
+          color: message['isMe'] ? Color(0xFF084C61) : Color(0xFF23242A),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Text(

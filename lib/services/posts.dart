@@ -94,7 +94,7 @@ class _SocialFeedScreenState extends State<SocialFeedScreen> {
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          backgroundColor: Color(0xFF084C61),
+          backgroundColor: Color(0xFF181A20),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
@@ -217,7 +217,7 @@ class _SocialFeedScreenState extends State<SocialFeedScreen> {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      backgroundColor: Color(0xFF084C61),
+      backgroundColor: Color(0xFF181A20),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
@@ -267,7 +267,7 @@ class _SocialFeedScreenState extends State<SocialFeedScreen> {
                           return Container(
                             margin: EdgeInsets.only(bottom: 16),
                             decoration: BoxDecoration(
-                              color: Color(0xFF0A5C75),
+                              color: Color(0xFF23242A),
                               borderRadius: BorderRadius.circular(12),
                             ),
                             child: Padding(
@@ -354,7 +354,7 @@ class _SocialFeedScreenState extends State<SocialFeedScreen> {
                     Container(
                       padding: EdgeInsets.all(16),
                       decoration: BoxDecoration(
-                        color: Color(0xFF0A5C75),
+                        color: Color(0xFF23242A),
                         borderRadius: BorderRadius.vertical(
                           top: Radius.circular(20),
                         ),
@@ -373,7 +373,7 @@ class _SocialFeedScreenState extends State<SocialFeedScreen> {
                                   borderSide: BorderSide.none,
                                 ),
                                 filled: true,
-                                fillColor: Color(0xFF084C61),
+                                fillColor: Color(0xFF23242A),
                                 contentPadding: EdgeInsets.symmetric(
                                   horizontal: 16,
                                   vertical: 8,
@@ -432,98 +432,132 @@ class _SocialFeedScreenState extends State<SocialFeedScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF084C61),
-              Color(0xFF063B4D),
-            ],
+      backgroundColor: Color(0xFF181A20),
+      body: Stack(
+        children: [
+          // Top Bar
+          Positioned(
+            top: 35,
+            left: 16,
+            right: 16,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Image.asset(
+                  'assets/icons/logo.png',
+                  width: 70,
+                ),
+                IconButton(
+                  icon: Icon(Icons.add_circle_outline, color: Colors.white),
+                  onPressed: _showAddPostDialog,
+                ),
+              ],
+            ),
           ),
-        ),
-        child: Stack(
-          children: [
-            // Top Bar
-            Positioned(
-              top: 35,
-              left: 16,
-              right: 16,
+
+          // Posts List
+          Padding(
+            padding: const EdgeInsets.fromLTRB(20, 100, 20, 100),
+            child: ListView.builder(
+              itemCount: posts.length,
+              itemBuilder: (context, index) {
+                return _buildPostCard(posts[index]);
+              },
+            ),
+          ),
+
+          // Bottom Navigation Bar
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Padding(
+              padding: EdgeInsets.only(bottom: 16),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  Image.asset(
-                    'assets/icons/logo.png',
-                    width: 70,
-                  ),
+                  _buildNavButton('assets/icons/profile.png', () {
+                    Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            Profile(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: Duration(milliseconds: 200),
+                      ),
+                    );
+                  }),
+                  // _buildNavButton('assets/icons/location pin.png', () {}),
                   IconButton(
-                    icon: Icon(Icons.add_circle_outline, color: Colors.white),
-                    onPressed: _showAddPostDialog,
+                    icon: ImageIcon(
+                      AssetImage('assets/icons/location pin.png'),
+                      color: Color(0xFF43716C),
+                      size: 26,
+                    ),
+                    onPressed: () {},
                   ),
+                  _buildNavButton('assets/icons/plane.png', () {
+                    Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            SwiperScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: Duration(milliseconds: 200),
+                      ),
+                    );
+                  }),
+                  _buildNavButton('assets/icons/Chat.png', () {
+                    Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            MessagingScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: Duration(milliseconds: 200),
+                      ),
+                    );
+                  }),
+                  _buildNavButton('assets/icons/Love.png', () {
+                    Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            LikeScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: Duration(milliseconds: 200),
+                      ),
+                    );
+                  }),
                 ],
               ),
             ),
-
-            // Posts List
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 100, 20, 100),
-              child: ListView.builder(
-                itemCount: posts.length,
-                itemBuilder: (context, index) {
-                  return _buildPostCard(posts[index]);
-                },
-              ),
-            ),
-
-            // Bottom Navigation Bar
-            Positioned(
-              bottom: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(24),
-                  ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildNavButton(
-                        'assets/icons/profile.png',
-                        () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Profile()))),
-                    _buildNavButton('assets/icons/location pin.png', () {}),
-                    _buildNavButton(
-                        'assets/icons/plane.png',
-                        () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SwiperScreen()))),
-                    _buildNavButton(
-                        'assets/icons/Chat.png',
-                        () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MessagingScreen()))),
-                    _buildNavButton(
-                        'assets/icons/Love.png',
-                        () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LikeScreen()))),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -532,7 +566,7 @@ class _SocialFeedScreenState extends State<SocialFeedScreen> {
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Color(0xFF0A5C75), // Warmer blue color
+        color: Color(0xFF23242A),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(

@@ -1,26 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter2/screens/swipeScreen.dart';
 import 'package:flutter2/services/chatRoomScreen.dart';
+import 'package:flutter2/services/likes.dart';
+import 'package:flutter2/services/posts.dart';
 import 'package:flutter2/services/profile.dart';
 import 'package:flutter2/services/search.dart';
-import 'package:flutter2/services/chatRoomScreen.dart';
 
 class MessagingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF084C61),
-              Color(0xFF063B4D),
-            ],
-          ),
-        ),
-        child: SafeArea(
+      backgroundColor: Color(0xFF181A20),
+      body: SafeArea(
+        child: Container(
+          color: Color(0xFF181A20),
           child: Column(
             children: [
               // Top Bar with Title
@@ -73,11 +66,7 @@ class MessagingScreen extends StatelessWidget {
                             width: 80,
                             margin: const EdgeInsets.only(right: 12),
                             decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [Color(0xFF0A5C75), Color(0xFF084C61)],
-                              ),
+                              color: Color(0xFF23242A),
                               borderRadius: BorderRadius.circular(12),
                               border: Border.all(color: Colors.white24),
                             ),
@@ -175,7 +164,7 @@ class MessagingScreen extends StatelessWidget {
                   margin: EdgeInsets.only(top: 24),
                   padding: EdgeInsets.only(top: 24),
                   decoration: BoxDecoration(
-                    color: Color(0xFF0A5C75),
+                    color: Color(0xFF181A20),
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(30)),
                   ),
@@ -199,137 +188,145 @@ class MessagingScreen extends StatelessWidget {
                         child: ListView.builder(
                           itemCount: 20,
                           itemBuilder: (context, index) {
-                            return InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => ChatRoomScreen(
-                                      userName: 'Jane',
-                                      userImage: 'assets/profile3.jpg',
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: Container(
-                                margin: EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 8,
-                                ),
-                                padding: EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withOpacity(0.05),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Stack(
-                                      children: [
-                                        ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                          child: Image.asset(
-                                            'assets/profile3.jpg',
-                                            width: 50,
-                                            height: 50,
-                                            fit: BoxFit.cover,
-                                          ),
+                            return Column(
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ChatRoomScreen(
+                                          userName: 'Jane',
+                                          userImage: 'assets/profile3.jpg',
                                         ),
-                                        if (index < 3)
-                                          Positioned(
-                                            right: 0,
-                                            bottom: 0,
-                                            child: Container(
-                                              width: 12,
-                                              height: 12,
-                                              decoration: BoxDecoration(
-                                                color: Colors.green,
-                                                shape: BoxShape.circle,
-                                                border: Border.all(
-                                                  color: Color(0xFF0A5C75),
-                                                  width: 2,
-                                                ),
+                                      ),
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 8),
+                                    child: Row(
+                                      children: [
+                                        Stack(
+                                          children: [
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(25),
+                                              child: Image.asset(
+                                                'assets/profile3.jpg',
+                                                width: 50,
+                                                height: 50,
+                                                fit: BoxFit.cover,
                                               ),
                                             ),
-                                          ),
-                                      ],
-                                    ),
-                                    SizedBox(width: 12),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text(
-                                                'Jane',
-                                                style: TextStyle(
-                                                  color: Colors.white,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontFamily: 'PlusJakartaSans',
-                                                ),
-                                              ),
-                                              Text(
-                                                '8:38 PM',
-                                                style: TextStyle(
-                                                  color: Colors.white
-                                                      .withOpacity(0.6),
-                                                  fontSize: 12,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 4),
-                                          Row(
-                                            children: [
-                                              Expanded(
-                                                child: Text(
-                                                  'Hello there! Would you like to join...',
-                                                  style: TextStyle(
-                                                    color: Colors.white
-                                                        .withOpacity(0.8),
-                                                    fontFamily:
-                                                        'PlusJakartaSans',
-                                                  ),
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
-                                              ),
-                                              if (index < 5)
-                                                Container(
-                                                  margin:
-                                                      EdgeInsets.only(left: 8),
-                                                  padding: EdgeInsets.symmetric(
-                                                    horizontal: 8,
-                                                    vertical: 4,
-                                                  ),
+                                            if (index < 3)
+                                              Positioned(
+                                                right: 0,
+                                                bottom: 0,
+                                                child: Container(
+                                                  width: 12,
+                                                  height: 12,
                                                   decoration: BoxDecoration(
-                                                    color: Colors.blue,
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                  ),
-                                                  child: Text(
-                                                    '2',
-                                                    style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                                    color: Colors.green,
+                                                    shape: BoxShape.circle,
+                                                    border: Border.all(
+                                                      color: Color(0xFF0A5C75),
+                                                      width: 2,
                                                     ),
                                                   ),
                                                 ),
+                                              ),
+                                          ],
+                                        ),
+                                        SizedBox(width: 12),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'Jane',
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      fontFamily:
+                                                          'PlusJakartaSans',
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    '8:38 PM',
+                                                    style: TextStyle(
+                                                      color: Colors.white
+                                                          .withOpacity(0.6),
+                                                      fontSize: 12,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              SizedBox(height: 4),
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      'Hello there! Would you like to join...',
+                                                      style: TextStyle(
+                                                        color: Colors.white
+                                                            .withOpacity(0.8),
+                                                        fontFamily:
+                                                            'PlusJakartaSans',
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                  if (index < 5)
+                                                    Container(
+                                                      margin: EdgeInsets.only(
+                                                          left: 8),
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                        horizontal: 8,
+                                                        vertical: 4,
+                                                      ),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.blue,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
+                                                      ),
+                                                      child: Text(
+                                                        '2',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                ],
+                                              ),
                                             ],
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
-                              ),
+                                Divider(
+                                  height: 1,
+                                  thickness: 0.5,
+                                  color: Colors.grey.withOpacity(0.3),
+                                  indent: 16,
+                                  endIndent: 16,
+                                ),
+                              ],
                             );
                           },
                         ),
@@ -340,33 +337,92 @@ class MessagingScreen extends StatelessWidget {
               ),
 
               // Bottom Navigation Bar
-              Container(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(24),
-                  ),
-                ),
+              Padding(
+                padding: EdgeInsets.only(bottom: 16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildNavButton(
-                        'assets/icons/profile.png',
-                        () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Profile()))),
-                    _buildNavButton('assets/icons/location pin.png', () {}),
-                    _buildNavButton(
-                        'assets/icons/plane.png',
-                        () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SwiperScreen()))),
-                    _buildNavButton('assets/icons/Chat.png', () {}),
-                    _buildNavButton('assets/icons/Love.png', () {}),
+                    _buildNavButton('assets/icons/profile.png', () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  Profile(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                          transitionDuration: Duration(milliseconds: 200),
+                        ),
+                      );
+                    }),
+                    // _buildNavButton('assets/icons/location pin.png', () {}),
+                    _buildNavButton('assets/icons/location pin.png', () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  SocialFeedScreen(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                          transitionDuration: Duration(milliseconds: 200),
+                        ),
+                      );
+                    }),
+                    _buildNavButton('assets/icons/plane.png', () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  SwiperScreen(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                          transitionDuration: Duration(milliseconds: 200),
+                        ),
+                      );
+                    }),
+                    IconButton(
+                      icon: ImageIcon(
+                        AssetImage('assets/icons/Chat.png'),
+                        color: Color(0xFF43716C),
+                        size: 26,
+                      ),
+                      onPressed: () {},
+                    ),
+                    _buildNavButton('assets/icons/Love.png', () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  LikeScreen(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                          transitionDuration: Duration(milliseconds: 200),
+                        ),
+                      );
+                    }),
                   ],
                 ),
               ),

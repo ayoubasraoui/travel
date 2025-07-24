@@ -81,7 +81,7 @@ flutter:
      - assets/icons/help1.png
      - assets/icons/life.jpg
      - assets/icons/facebook_logo.png
-     - assets/icons/google_logo.png
+     - assets/icons/google_logo.png 
      - assets/icons/profile.png
      - assets/icons/plane.png
      - assets/icons/Love.png
@@ -89,6 +89,8 @@ flutter:
      - assets/icons/location pin.png
      - assets/icons/apple.png
      - assets/icons/google.png
+     - assets/black.png
+     
   #  - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see

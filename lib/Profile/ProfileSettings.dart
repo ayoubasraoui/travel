@@ -20,18 +20,10 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF084C61),
-              Color(0xFF063B4D),
-            ],
-          ),
-        ),
-        child: SafeArea(
+      backgroundColor: Color(0xFF181A20),
+      body: SafeArea(
+        child: Container(
+          color: Color(0xFF181A20),
           child: Column(
             children: [
               // App Bar
@@ -177,7 +169,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Color(0xFF23242A),
         borderRadius: BorderRadius.circular(12),
       ),
       child: TextField(
@@ -198,7 +190,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     return Container(
       margin: EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Color(0xFF23242A),
         borderRadius: BorderRadius.circular(12),
       ),
       child: ListTile(
@@ -233,13 +225,13 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
       margin: EdgeInsets.only(bottom: 16),
       padding: EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Color(0xFF23242A),
         borderRadius: BorderRadius.circular(12),
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: value,
-          dropdownColor: Color(0xFF084C61),
+          dropdownColor: Color(0xFF23242A),
           style: TextStyle(color: Colors.white),
           items: items.map((String item) {
             return DropdownMenuItem<String>(
@@ -291,7 +283,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
-              color: isSelected ? Colors.white : Colors.white.withOpacity(0.1),
+              color: isSelected ? Colors.white : Color(0xFF23242A),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
@@ -342,7 +334,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     return Container(
       margin: EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Color(0xFF23242A),
         borderRadius: BorderRadius.circular(12),
       ),
       child: ListTile(
@@ -362,7 +354,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     return Container(
       margin: EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.1),
+        color: Color(0xFF23242A),
         borderRadius: BorderRadius.circular(12),
       ),
       child: SwitchListTile(

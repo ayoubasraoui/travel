@@ -164,11 +164,6 @@
 
 // #####################################################################
 
-
-
-
-
-
 // import 'package:flutter/material.dart';
 
 // class FilterScreen extends StatefulWidget {
@@ -421,22 +416,13 @@
 //                   );
 //                 }).toList(),
 //               ),
-//             ),    
+//             ),
 //           ],
 //         ),
 //       ),
 //     );
 //   }
 // }
-
-
-
-
-
-
-
-
-
 
 // import 'package:flutter/material.dart';
 
@@ -741,10 +727,7 @@
 //   }
 // }
 
-
-
 // //////////////////////////////////////////////////////////////////////////////
-
 
 // import 'package:flutter/material.dart';
 // import 'package:intl/intl.dart';
@@ -1011,7 +994,7 @@
 //                 ),
 //                 child: DropdownButtonFormField<String>(
 //                   value: _selectedDestination,
-//                   hint: Text('Select a destination'),
+//                   hint: Text('Select mode of transport'),
 //                   isExpanded: true,
 //                   icon: Icon(Icons.arrow_drop_down),
 //                   iconSize: 24,
@@ -1311,10 +1294,6 @@
 //   }
 // }
 
-
-
-
-
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -1335,8 +1314,14 @@ class _FilterScreenState extends State<FilterScreen> {
   bool _showAdvancedFilters = false;
 
   final List<String> _destinations = [
-    'Casablanca', 'Tangier', 'Agadir', 'Rabat',
-    'Akchour', 'Laayoune', 'Toubqal', 'Essaouira',
+    'Casablanca',
+    'Tangier',
+    'Agadir',
+    'Rabat',
+    'Akchour',
+    'Laayoune',
+    'Toubqal',
+    'Essaouira',
   ];
 
   final List<Map<String, dynamic>> _transportModes = [
@@ -1356,7 +1341,8 @@ class _FilterScreenState extends State<FilterScreen> {
 
   Widget _buildSectionTitle(String title) {
     return Padding(
-      padding: const EdgeInsets.only(top: 24.0, bottom: 16.0), // Increased spacing
+      padding:
+          const EdgeInsets.only(top: 24.0, bottom: 16.0), // Increased spacing
       child: Text(
         title,
         style: TextStyle(
@@ -1392,7 +1378,8 @@ class _FilterScreenState extends State<FilterScreen> {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: isSelected ? Color(0xFF084C61) : Colors.white,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),
               ),
@@ -1423,7 +1410,8 @@ class _FilterScreenState extends State<FilterScreen> {
             ),
             Text(
               '${labelFormatter(values.start)} - ${labelFormatter(values.end)}',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -1448,7 +1436,8 @@ class _FilterScreenState extends State<FilterScreen> {
     );
   }
 
-  Widget _buildDatePicker(String title, DateTime? date, Function(DateTime?) onDateChanged) {
+  Widget _buildDatePicker(
+      String title, DateTime? date, Function(DateTime?) onDateChanged) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -1476,7 +1465,9 @@ class _FilterScreenState extends State<FilterScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  date != null ? DateFormat.yMMMd().format(date) : 'Select date',
+                  date != null
+                      ? DateFormat.yMMMd().format(date)
+                      : 'Select date',
                   style: TextStyle(color: Colors.white),
                 ),
                 Icon(Icons.calendar_today, color: Colors.white, size: 20),
@@ -1506,25 +1497,27 @@ class _FilterScreenState extends State<FilterScreen> {
           ),
           child: DropdownButton<String>(
             value: _selectedDestination,
-            hint: Text('Select destination', style: TextStyle(color: Colors.white70)),
+            hint: Text('Select destination',
+                style: TextStyle(color: Colors.white70)),
             isExpanded: true,
             dropdownColor: Color(0xFF084C61),
             underline: SizedBox(),
             icon: Icon(Icons.arrow_drop_down, color: Colors.white),
             style: TextStyle(color: Colors.white, fontSize: 16),
             onChanged: (value) => setState(() => _selectedDestination = value),
-            items: _destinations.map((destination) => 
-              DropdownMenuItem(
-                value: destination,
-                child: Text(destination),
-              )
-            ).toList(),
+            items: _destinations
+                .map((destination) => DropdownMenuItem(
+                      value: destination,
+                      child: Text(destination),
+                    ))
+                .toList(),
           ),
         ),
         if (_selectedDestination != null)
           TextButton.icon(
             icon: Icon(Icons.close, color: Colors.red[300], size: 18),
-            label: Text('Clear destination', style: TextStyle(color: Colors.red[300])),
+            label: Text('Clear destination',
+                style: TextStyle(color: Colors.red[300])),
             onPressed: () => setState(() => _selectedDestination = null),
           ),
       ],
@@ -1538,9 +1531,8 @@ class _FilterScreenState extends State<FilterScreen> {
       children: _transportModes.map((transport) {
         final isSelected = _selectedTransport == transport['name'];
         return InkWell(
-          onTap: () => setState(() => 
-            _selectedTransport = isSelected ? null : transport['name']
-          ),
+          onTap: () => setState(
+              () => _selectedTransport = isSelected ? null : transport['name']),
           child: Container(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
@@ -1560,7 +1552,8 @@ class _FilterScreenState extends State<FilterScreen> {
                   transport['name'],
                   style: TextStyle(
                     color: isSelected ? Color(0xFF084C61) : Colors.white,
-                    fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.normal,
                   ),
                 ),
               ],
@@ -1586,7 +1579,7 @@ class _FilterScreenState extends State<FilterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF084C61),
+      backgroundColor: Color(0xFF181A20),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -1615,7 +1608,7 @@ class _FilterScreenState extends State<FilterScreen> {
           children: [
             _buildSectionTitle('I\'m interested in...'),
             _buildGenderSelector(),
-            
+
             SizedBox(height: 24), // Increased spacing between sections
             _buildRangeSlider(
               title: 'Age range',

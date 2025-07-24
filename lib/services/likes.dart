@@ -10,7 +10,7 @@
 // class _LikeScreenState extends State<LikeScreen> {
 //   int _selectedIndex = 0;
 //   final List<String> _tabs = ["Interested", "Your Interests", "Suggestions"];
-  
+
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
@@ -162,8 +162,6 @@
 //   }
 // }
 
-
-
 // final version could change##############################################
 
 // import 'dart:ui'; // Import for blur effect
@@ -179,7 +177,7 @@
 // class _LikeScreenState extends State<LikeScreen> {
 //   int _selectedIndex = 0;
 //   final List<String> _tabs = ["Interested", "Your Interests", "Suggestions"];
-  
+
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
@@ -354,12 +352,12 @@
 //   }
 // }
 
-
-
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter2/screens/swipeScreen.dart';
+import 'package:flutter2/services/posts.dart';
 import 'package:flutter2/services/profile.dart';
+import 'package:flutter2/services/chat.dart'; // Added import for MessagingScreen
 
 class LikeScreen extends StatefulWidget {
   @override
@@ -373,7 +371,7 @@ class _LikeScreenState extends State<LikeScreen> {
     {"title": "Your Interests", "count": 8},
     {"title": "Suggestions", "count": 15}
   ];
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -383,8 +381,8 @@ class _LikeScreenState extends State<LikeScreen> {
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
             colors: [
-              Color(0xFF084C61),
-              Color(0xFF063B4D),
+              Color(0xFF181A20),
+              Color(0xFF181A20),
             ],
           ),
         ),
@@ -420,9 +418,12 @@ class _LikeScreenState extends State<LikeScreen> {
                         });
                       },
                       child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                        padding:
+                            EdgeInsets.symmetric(vertical: 12, horizontal: 8),
                         decoration: BoxDecoration(
-                          color: isSelected ? Colors.white.withOpacity(0.2) : Colors.transparent,
+                          color: isSelected
+                              ? Colors.white.withOpacity(0.2)
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Row(
@@ -434,23 +435,32 @@ class _LikeScreenState extends State<LikeScreen> {
                                 _tabs[index]["title"],
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  color: isSelected ? Colors.white : Colors.white.withOpacity(0.6),
-                                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                  color: isSelected
+                                      ? Colors.white
+                                      : Colors.white.withOpacity(0.6),
+                                  fontWeight: isSelected
+                                      ? FontWeight.bold
+                                      : FontWeight.normal,
                                   fontSize: 14,
                                 ),
                               ),
                             ),
                             SizedBox(width: 4),
                             Container(
-                              padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 6, vertical: 2),
                               decoration: BoxDecoration(
-                                color: isSelected ? Colors.white.withOpacity(0.2) : Colors.transparent,
+                                color: isSelected
+                                    ? Colors.white.withOpacity(0.2)
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(10),
                               ),
                               child: Text(
                                 "${_tabs[index]["count"]}",
                                 style: TextStyle(
-                                  color: isSelected ? Colors.white : Colors.white.withOpacity(0.6),
+                                  color: isSelected
+                                      ? Colors.white
+                                      : Colors.white.withOpacity(0.6),
                                   fontSize: 11,
                                 ),
                               ),
@@ -494,18 +504,19 @@ class _LikeScreenState extends State<LikeScreen> {
                           fit: StackFit.expand,
                           children: [
                             // Profile Image with conditional blur
-                            _selectedIndex == 0 
-                              ? ImageFiltered(
-                                  imageFilter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                                  child: Image.asset(
+                            _selectedIndex == 0
+                                ? ImageFiltered(
+                                    imageFilter: ImageFilter.blur(
+                                        sigmaX: 10, sigmaY: 10),
+                                    child: Image.asset(
+                                      'assets/profile1.jpg',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : Image.asset(
                                     'assets/profile1.jpg',
                                     fit: BoxFit.cover,
                                   ),
-                                )
-                              : Image.asset(
-                                  'assets/profile1.jpg',
-                                  fit: BoxFit.cover,
-                                ),
                             // Gradient Overlay
                             Container(
                               decoration: BoxDecoration(
@@ -553,7 +564,8 @@ class _LikeScreenState extends State<LikeScreen> {
                                 top: 12,
                                 right: 12,
                                 child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 8, vertical: 4),
                                   decoration: BoxDecoration(
                                     color: Colors.white.withOpacity(0.2),
                                     borderRadius: BorderRadius.circular(12),
@@ -561,7 +573,8 @@ class _LikeScreenState extends State<LikeScreen> {
                                   child: Row(
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
-                                      Icon(Icons.favorite, color: Colors.red, size: 16),
+                                      Icon(Icons.favorite,
+                                          color: Colors.red, size: 16),
                                       SizedBox(width: 4),
                                       Text(
                                         '2d ago',
@@ -607,25 +620,91 @@ class _LikeScreenState extends State<LikeScreen> {
             ),
 
             // Bottom Navigation Bar
-            Container(
-              padding: EdgeInsets.symmetric(vertical: 16),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(24),
-                  topRight: Radius.circular(24),
-                ),
-              ),
+            Padding(
+              padding: EdgeInsets.only(bottom: 16),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildNavButton('assets/icons/profile.png', () => 
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Profile()))),
-                  _buildNavButton('assets/icons/location pin.png', () {}),
-                  _buildNavButton('assets/icons/plane.png', () => 
-                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SwiperScreen()))),
-                  _buildNavButton('assets/icons/Chat.png', () {}),
-                  _buildNavButton('assets/icons/Love.png', () {}),
+                  _buildNavButton('assets/icons/profile.png', () {
+                    Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            Profile(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: Duration(milliseconds: 200),
+                      ),
+                    );
+                  }),
+                  // _buildNavButton('assets/icons/location pin.png', () {}),
+                  _buildNavButton('assets/icons/location pin.png', () {
+                    Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            SocialFeedScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: Duration(milliseconds: 200),
+                      ),
+                    );
+                  }),
+
+                  _buildNavButton('assets/icons/plane.png', () {
+                    Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            SwiperScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: Duration(milliseconds: 200),
+                      ),
+                    );
+                  }),
+                  _buildNavButton('assets/icons/Chat.png', () {
+                    Navigator.pushReplacement(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) =>
+                            MessagingScreen(),
+                        transitionsBuilder:
+                            (context, animation, secondaryAnimation, child) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: child,
+                          );
+                        },
+                        transitionDuration: Duration(milliseconds: 200),
+                      ),
+                    );
+                  }),
+                  // _buildNavButton('assets/icons/Love.png', () {
+                  //   // Handle love icon press
+                  // }),
+                  IconButton(
+                      icon: ImageIcon(
+                        AssetImage('assets/icons/Love.png'),
+                        color: Color(0xFF43716C),
+                        size: 26,
+                      ),
+                      onPressed: () {}),
                 ],
               ),
             ),

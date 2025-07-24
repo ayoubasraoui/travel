@@ -364,7 +364,7 @@
 //             ),
 //           ),
 //           Positioned(
-//             bottom: 12,
+//             bottom: 20,
 //             left: 0,
 //             right: 0,
 //             child: Row(
@@ -403,10 +403,7 @@
 //                 IconButton(
 //                   icon: ImageIcon(AssetImage('assets/icons/Love.png'), color: Colors.white, size: 30),
 //                   onPressed: () {
-//                     Navigator.pushReplacement(
-//                       context,
-//                       MaterialPageRoute(builder: (context)=>LikeScreen())
-//                     );
+//                     // Handle favorite icon press
 //                   },
 //                 ),
 //               ],
@@ -601,7 +598,7 @@ class CardView extends StatelessWidget {
       builder: (context, scrollController) {
         return Container(
           decoration: BoxDecoration(
-            color: Color(0xFF084C61),
+            color: Color(0xFF181A20),
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: ListView(
@@ -688,7 +685,8 @@ class CardView extends StatelessWidget {
                           child: Text(
                             'Message',
                             style: TextStyle(
-                              color: Color(0xFF084C61),
+                              // color: Color(0xFF084C61),
+                              color: Color(0xFF181A20),
                               fontFamily: 'PlusJakartaSans',
                               fontWeight: FontWeight.bold,
                             ),
@@ -804,14 +802,7 @@ class _SwiperScreenState extends State<SwiperScreen> {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF084C61),
-              Color(0xFF063B4D),
-            ],
-          ),
+          color: Color(0xFF181A20), // solid dark background
         ),
         child: Stack(
           children: [
@@ -836,7 +827,7 @@ class _SwiperScreenState extends State<SwiperScreen> {
                     },
                     child: Icon(
                       Icons.filter_alt_outlined,
-                      color: Colors.white,
+                      color: Colors.white.withOpacity(0.85),
                       size: 28,
                     ),
                   ),
@@ -872,48 +863,97 @@ class _SwiperScreenState extends State<SwiperScreen> {
               bottom: 0,
               left: 0,
               right: 0,
-              child: Container(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(0.1),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(24),
-                    topRight: Radius.circular(24),
-                  ),
-                ),
+              child: Padding(
+                padding: EdgeInsets.only(bottom: 16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildNavButton(
-                        'assets/icons/profile.png',
-                        () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Profile()))),
-                    _buildNavButton(
-                        'assets/icons/location pin.png',
-                        () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SocialFeedScreen()))),
-                    _buildNavButton(
-                        'assets/icons/plane.png',
-                        () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => SwiperScreen()))),
-                    _buildNavButton(
-                        'assets/icons/Chat.png',
-                        () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MessagingScreen()))),
-                    _buildNavButton(
-                        'assets/icons/Love.png',
-                        () => Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LikeScreen()))),
+                    _buildNavButton('assets/icons/profile.png', () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  Profile(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                          transitionDuration: Duration(milliseconds: 200),
+                        ),
+                      );
+                    }),
+                    _buildNavButton('assets/icons/location pin.png', () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  SocialFeedScreen(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                          transitionDuration: Duration(milliseconds: 200),
+                        ),
+                      );
+                    }),
+                    // _buildNavButton(
+                    //     'assets/icons/plane.png',
+                    //     () => Navigator.pushReplacement(
+                    //         context,
+                    //         MaterialPageRoute(
+                    //             builder: (context) => SwiperScreen()))),
+                    IconButton(
+                      icon: ImageIcon(
+                        AssetImage('assets/icons/plane.png'),
+                        color: Color(0xFF43716C),
+                        size: 26,
+                      ),
+                      onPressed: () {},
+                    ),
+                    _buildNavButton('assets/icons/Chat.png', () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  MessagingScreen(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                          transitionDuration: Duration(milliseconds: 200),
+                        ),
+                      );
+                    }),
+                    _buildNavButton('assets/icons/Love.png', () {
+                      Navigator.pushReplacement(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder:
+                              (context, animation, secondaryAnimation) =>
+                                  LikeScreen(),
+                          transitionsBuilder:
+                              (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+                          transitionDuration: Duration(milliseconds: 200),
+                        ),
+                      );
+                    }),
                   ],
                 ),
               ),
@@ -924,20 +964,15 @@ class _SwiperScreenState extends State<SwiperScreen> {
     );
   }
 
-  Widget _buildNavButton(String icon, VoidCallback onPressed) {
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.transparent,
+  Widget _buildNavButton(String icon, VoidCallback onPressed,
+      {bool isActive = false}) {
+    return IconButton(
+      icon: ImageIcon(
+        AssetImage(icon),
+        color: Colors.white,
+        size: 26,
       ),
-      child: IconButton(
-        icon: ImageIcon(
-          AssetImage(icon),
-          color: Colors.white,
-          size: 26,
-        ),
-        onPressed: onPressed,
-      ),
+      onPressed: onPressed,
     );
   }
 

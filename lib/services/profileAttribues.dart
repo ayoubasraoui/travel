@@ -207,24 +207,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter2/Profile/ProfileSettings.dart';
 import 'package:flutter2/screens/loginScreen.dart';
 import 'package:flutter2/screens/swipeScreen.dart';
-import 'package:flutter2/services/chat.dart';
 import 'package:flutter2/services/likes.dart';
 import 'package:flutter2/services/posts.dart';
-import 'package:flutter2/services/profileAttribues.dart';
+import 'package:flutter2/services/profile.dart';
 
-class Profile extends StatefulWidget {
+class ProfileAtt extends StatefulWidget {
   @override
   _ProfileState createState() => _ProfileState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfileState extends State<ProfileAtt> {
   int _currentIndex = 2; // Profile tab index (assuming it's the last tab)
+
   final String userName = "Jane Doe";
   final int age = 22;
   final String location = "New York, USA";
   final String bio = "Adventure seeker | Coffee lover | Tech enthusiast";
-  final PageController _pageController = PageController(viewportFraction: 0.85);
-  int _currentPlanPage = 0;
 
   void _onTabTapped(int index) {
     if (index != _currentIndex) {
@@ -325,344 +323,187 @@ class _ProfileState extends State<Profile> {
     return Scaffold(
       backgroundColor: Color(0xFF181A20),
       body: SafeArea(
-        child: Column(
-          children: [
-            // App Bar
-            Padding(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Profile',
-                    style: TextStyle(
-                      fontFamily: 'PlusJakartaSans',
-                      fontSize: 28,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  Spacer(),
-                  IconButton(
-                    icon: Icon(Icons.settings, color: Colors.white, size: 28),
-                    onPressed: () {
-                      Navigator.pushReplacement(
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // App Bar
+                Row(
+                  children: [
+                    IconButton(
+                      icon:
+                          Icon(Icons.arrow_back, color: Colors.white, size: 28),
+                      onPressed: () => Navigator.pushReplacement(
                         context,
-                        PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  ProfileAtt(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
-            ),
-            // Profile Image
-            SizedBox(height: 8),
-            Center(
-              child: Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 76,
-                    backgroundImage: AssetImage('assets/profile1.jpg'),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ProfileSettingsScreen(),
-                          ),
-                        );
-                      },
-                      child: Container(
-                        width: 40,
-                        height: 40,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black26,
-                              blurRadius: 6,
-                              offset: Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Icon(Icons.edit,
-                            color: Color(0xFF43716C), size: 22),
+                        MaterialPageRoute(builder: (context) => Profile()),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(height: 20),
-            // Name and Age
-            Center(
-              child: RichText(
-                text: TextSpan(
-                  style: TextStyle(
-                    fontFamily: 'PlusJakartaSans',
-                    fontSize: 34,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
-                  children: [
-                    TextSpan(text: userName),
-                    TextSpan(
-                      text: ', $age',
+                    SizedBox(width: 8),
+                    Text(
+                      'Settings',
                       style: TextStyle(
-                        fontWeight: FontWeight.normal,
+                        fontFamily: 'PlusJakartaSans',
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
                   ],
                 ),
-              ),
-            ),
-            SizedBox(height: 24),
-            // Plans/Subscriptions Carousel
-            SizedBox(
-              height: 320,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 12),
-                child: PageView(
-                  controller: _pageController,
-                  onPageChanged: (int page) {
-                    setState(() {
-                      _currentPlanPage = page;
-                    });
-                  },
-                  padEnds: false,
-                  children: [
-                    _buildPlanCard('Travel BLACK', 'assets/plan_black.png'),
-                    _buildPlanCard('Travel PLUS', 'assets/plan_plus.png'),
-                    _buildPlanCard('Travel BASIC', 'assets/plan_basic.png'),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(height: 16),
-            // Page indicator
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                3,
-                (index) => Container(
-                  margin: EdgeInsets.symmetric(horizontal: 4),
-                  width: 8,
-                  height: 8,
+                SizedBox(height: 32),
+                // Account Section
+                Text('Account',
+                    style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'PlusJakartaSans',
+                        letterSpacing: 1)),
+                SizedBox(height: 12),
+                Container(
                   decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.white
-                        .withOpacity(_currentPlanPage == index ? 1 : 0.3),
+                    color: Color(0xFF23242A),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildSettingsTile(
+                        icon: Icons.person,
+                        title: 'Profile settings',
+                        onTap: () {},
+                      ),
+                      Divider(height: 1, color: Colors.white12),
+                      _buildSettingsTile(
+                        icon: Icons.settings,
+                        title: 'App settings',
+                        onTap: () {},
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(bottom: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            // _buildNavButton(
-            //     'assets/icons/profile.png',
-            //     () => Navigator.pushReplacement(context,
-            //         MaterialPageRoute(builder: (context) => Profile()))),
-            IconButton(
-              icon: ImageIcon(
-                AssetImage('assets/icons/profile.png'),
-                color: Color(0xFF43716C),
-                size: 26,
-              ),
-              onPressed: () {},
-            ),
-            IconButton(
-              icon: ImageIcon(
-                AssetImage('assets/icons/location pin.png'),
-                color: Colors.white,
-                size: 26,
-              ),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        SocialFeedScreen(),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      );
-                    },
-                    transitionDuration: Duration(milliseconds: 200),
+                SizedBox(height: 28),
+                // App Section
+                Text('App',
+                    style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'PlusJakartaSans',
+                        letterSpacing: 1)),
+                SizedBox(height: 12),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFF23242A),
+                    borderRadius: BorderRadius.circular(14),
                   ),
-                );
-              },
-            ),
-            IconButton(
-              icon: ImageIcon(
-                AssetImage('assets/icons/plane.png'),
-                color: Colors.white,
-                size: 26,
-              ),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        SwiperScreen(),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      );
-                    },
-                    transitionDuration: Duration(milliseconds: 200),
+                  child: Column(
+                    children: [
+                      _buildSettingsTile(
+                        icon: Icons.subscriptions,
+                        title: 'Subscription',
+                        onTap: () {},
+                      ),
+                      Divider(height: 1, color: Colors.white12),
+                      _buildSettingsTile(
+                        icon: Icons.notifications,
+                        title: 'Notifications',
+                        onTap: () {},
+                      ),
+                      Divider(height: 1, color: Colors.white12),
+                      _buildSettingsTile(
+                        icon: Icons.language,
+                        title: 'Language',
+                        onTap: () {},
+                      ),
+                      Divider(height: 1, color: Colors.white12),
+                      _buildSettingsTile(
+                        icon: Icons.palette,
+                        title: 'Theme',
+                        onTap: () {},
+                      ),
+                    ],
                   ),
-                );
-              },
-            ),
-            IconButton(
-              icon: ImageIcon(
-                AssetImage('assets/icons/Chat.png'),
-                color: Colors.white,
-                size: 26,
-              ),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        MessagingScreen(),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      );
-                    },
-                    transitionDuration: Duration(milliseconds: 200),
+                ),
+                SizedBox(height: 28),
+                // Legal Section
+                Text('Legal',
+                    style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'PlusJakartaSans',
+                        letterSpacing: 1)),
+                SizedBox(height: 12),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFF23242A),
+                    borderRadius: BorderRadius.circular(14),
                   ),
-                );
-              },
-            ),
-            IconButton(
-              icon: ImageIcon(
-                AssetImage('assets/icons/Love.png'),
-                color: Colors.white,
-                size: 26,
-              ),
-              onPressed: () {
-                Navigator.pushReplacement(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        LikeScreen(),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: child,
-                      );
-                    },
-                    transitionDuration: Duration(milliseconds: 200),
+                  child: Column(
+                    children: [
+                      _buildSettingsTile(
+                        icon: Icons.description,
+                        title: 'Terms and conditions',
+                        onTap: () {},
+                      ),
+                      Divider(height: 1, color: Colors.white12),
+                      _buildSettingsTile(
+                        icon: Icons.privacy_tip,
+                        title: 'Privacy policy',
+                        onTap: () {},
+                      ),
+                      Divider(height: 1, color: Colors.white12),
+                      _buildSettingsTile(
+                        icon: Icons.help_outline,
+                        title: 'Help & Support',
+                        onTap: () {},
+                      ),
+                    ],
                   ),
-                );
-              },
+                ),
+                SizedBox(height: 28),
+                // Danger Zone
+                Text('Danger Zone',
+                    style: TextStyle(
+                        color: Colors.red[200],
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'PlusJakartaSans',
+                        letterSpacing: 1)),
+                SizedBox(height: 12),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Color(0xFF23242A),
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Column(
+                    children: [
+                      _buildActionButton(
+                        context: context,
+                        icon: Icons.logout,
+                        title: 'Log out',
+                        onTap: () => _showLogoutDialog(context),
+                      ),
+                      Divider(height: 1, color: Colors.white12),
+                      _buildActionButton(
+                        context: context,
+                        icon: Icons.delete_forever,
+                        title: 'Delete account',
+                        onTap: () => _showDeleteAccountDialog(context),
+                        isDangerous: true,
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 20),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildPlanCard(String title, String assetPath) {
-    return Container(
-      margin: EdgeInsets.only(left: 0, right: 8, top: 12, bottom: 12),
-      width: 400,
-      height: 300,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 20,
-            offset: Offset(0, 4),
           ),
-        ],
-        gradient: title == 'Travel BLACK'
-            ? LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFF52524F),
-                  Color(0xFF7A7A76),
-                  Color(0xFFE0E0DC),
-                  Color(0xFFFFFFFF),
-                ],
-                stops: [0.0, 0.35, 0.7, 1.0],
-              )
-            : null,
-        color: title == 'Travel BLACK' ? null : Colors.white,
+        ),
       ),
-      child: Stack(
-        children: [
-          if (title == 'Travel BLACK')
-            Positioned(
-              top: 18,
-              left: 4,
-              child: Image.asset(
-                'assets/black.png',
-                width: 170,
-                height: 45,
-                fit: BoxFit.contain,
-              ),
-            ),
-          if (title == 'Travel BLACK')
-            Positioned(
-              top: 18,
-              right: 4,
-              child: ElevatedButton(
-                onPressed: () {},
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.black,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(40),
-                  ),
-                  padding: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
-                  elevation: 2,
-                ),
-                child: Text(
-                  'Upgrade',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 16,
-                  ),
-                ),
-              ),
-            ),
-          if (title != 'Travel BLACK' && assetPath.endsWith('.png'))
-            Positioned.fill(
-              child: Image.asset(assetPath, fit: BoxFit.cover),
-            ),
-          // No text or overlay
-        ],
-      ),
+      bottomNavigationBar: SizedBox.shrink(),
     );
   }
 
@@ -672,15 +513,16 @@ class _ProfileState extends State<Profile> {
     required VoidCallback onTap,
   }) {
     return ListTile(
-      leading: Icon(icon, color: Color(0xFF084C61)),
+      leading: Icon(icon, color: Color(0xFF43716C)),
       title: Text(
         title,
         style: TextStyle(
           fontFamily: 'PlusJakartaSans',
           fontSize: 16,
+          color: Colors.white,
         ),
       ),
-      trailing: Icon(Icons.chevron_right, color: Colors.grey),
+      trailing: Icon(Icons.chevron_right, color: Colors.white54),
       onTap: onTap,
     );
   }
@@ -692,7 +534,7 @@ class _ProfileState extends State<Profile> {
     required VoidCallback onTap,
     bool isDangerous = false,
   }) {
-    final color = isDangerous ? Colors.red : Color(0xFF084C61);
+    final color = isDangerous ? Colors.red : Color(0xFF43716C);
 
     return Material(
       color: Colors.transparent,
@@ -707,7 +549,7 @@ class _ProfileState extends State<Profile> {
               Text(
                 title,
                 style: TextStyle(
-                  color: color,
+                  color: Colors.white,
                   fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),

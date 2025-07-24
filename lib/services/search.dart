@@ -47,18 +47,10 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              Color(0xFF084C61),
-              Color(0xFF063B4D),
-            ],
-          ),
-        ),
-        child: SafeArea(
+      backgroundColor: Color(0xFF181A20),
+      body: SafeArea(
+        child: Container(
+          color: Color(0xFF181A20),
           child: Column(
             children: [
               // Search Header
@@ -74,7 +66,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 16),
                         decoration: BoxDecoration(
-                          color: Colors.white.withOpacity(0.1),
+                          color: Color(0xFF23242A),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: TextField(
@@ -104,7 +96,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       padding: EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.05),
+                        color: Color(0xFF23242A),
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: ListTile(
