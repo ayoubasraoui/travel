@@ -433,6 +433,7 @@ class CardView extends StatelessWidget {
   final String location;
   final String bio;
   final List<String> interests;
+  final int index;
 
   CardView({
     required this.image,
@@ -441,6 +442,7 @@ class CardView extends StatelessWidget {
     required this.location,
     required this.bio,
     required this.interests,
+    required this.index,
   });
 
   @override
@@ -462,7 +464,7 @@ class CardView extends StatelessWidget {
           children: [
             // Main Image
             Hero(
-              tag: 'profile_$name',
+              tag: 'swipe_profile_$name$index',
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(24),
                 child: Image.asset(
@@ -608,7 +610,7 @@ class CardView extends StatelessWidget {
                 children: [
                   // Profile Image
                   Hero(
-                    tag: 'profile_$name',
+                    tag: 'swipe_profile_$name$index',
                     child: Container(
                       height: 400,
                       width: double.infinity,
@@ -854,6 +856,7 @@ class _SwiperScreenState extends State<SwiperScreen> {
                     location: profile['location']!,
                     bio: profile['bio']!,
                     interests: List<String>.from(profile['interests']),
+                    index: index,
                   );
                 },
               ),

@@ -205,6 +205,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter2/Profile/ProfileSettings.dart';
+import 'package:flutter2/Plans/Black.dart';
+import 'package:flutter2/Plans/Vip.dart';
+import 'package:flutter2/Plans/Plus.dart';
 import 'package:flutter2/screens/loginScreen.dart';
 import 'package:flutter2/screens/swipeScreen.dart';
 import 'package:flutter2/services/chat.dart';
@@ -365,9 +368,12 @@ class _ProfileState extends State<Profile> {
             Center(
               child: Stack(
                 children: [
-                  CircleAvatar(
-                    radius: 76,
-                    backgroundImage: AssetImage('assets/profile1.jpg'),
+                  Hero(
+                    tag: 'profile_image_main',
+                    child: CircleAvatar(
+                      radius: 76,
+                      backgroundImage: AssetImage('assets/profile1.jpg'),
+                    ),
                   ),
                   Positioned(
                     bottom: 0,
@@ -430,7 +436,7 @@ class _ProfileState extends State<Profile> {
             SizedBox(height: 24),
             // Plans/Subscriptions Carousel
             SizedBox(
-              height: 320,
+              height: 280,
               child: Padding(
                 padding: const EdgeInsets.only(left: 12),
                 child: PageView(
@@ -442,9 +448,9 @@ class _ProfileState extends State<Profile> {
                   },
                   padEnds: false,
                   children: [
-                    _buildPlanCard('Travel BLACK', 'assets/plan_black.png'),
-                    _buildPlanCard('Travel PLUS', 'assets/plan_plus.png'),
-                    _buildPlanCard('Travel BASIC', 'assets/plan_basic.png'),
+                    _buildPlanCard('Travel BLACK'),
+                    _buildPlanCard('Travel VIP'),
+                    _buildPlanCard('Travel PLUS'),
                   ],
                 ),
               ),
@@ -465,6 +471,50 @@ class _ProfileState extends State<Profile> {
                         .withOpacity(_currentPlanPage == index ? 1 : 0.3),
                   ),
                 ),
+              ),
+            ),
+            SizedBox(height: 16),
+            // Thin grey line separator
+            Container(
+              height: 1,
+              margin: EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.transparent,
+                    Colors.grey.withOpacity(0.3),
+                    Colors.transparent,
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 16),
+            // Feature boxes
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: _buildFeatureBox(
+                      title: 'Subscriptions',
+                      icon: Icons.add,
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: _buildFeatureBox(
+                      title: 'Boost',
+                      icon: Icons.add,
+                    ),
+                  ),
+                  SizedBox(width: 12),
+                  Expanded(
+                    child: _buildFeatureBox(
+                      title: 'Easy Chat',
+                      icon: Icons.add,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
@@ -589,11 +639,11 @@ class _ProfileState extends State<Profile> {
     );
   }
 
-  Widget _buildPlanCard(String title, String assetPath) {
+  Widget _buildPlanCard(String title) {
     return Container(
-      margin: EdgeInsets.only(left: 0, right: 8, top: 12, bottom: 12),
+      margin: EdgeInsets.only(left: 0, right: 8, top: 8, bottom: 8),
       width: 400,
-      height: 300,
+      height: 260,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
@@ -610,13 +660,40 @@ class _ProfileState extends State<Profile> {
                 colors: [
                   Color(0xFF52524F),
                   Color(0xFF7A7A76),
-                  Color(0xFFE0E0DC),
                   Color(0xFFFFFFFF),
                 ],
-                stops: [0.0, 0.35, 0.7, 1.0],
+                stops: [0.0, 0.35, 1.0],
               )
-            : null,
-        color: title == 'Travel BLACK' ? null : Colors.white,
+            : title == 'Travel VIP'
+                ? LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0xFFD7C78A),
+                      Color(0xFFE5D8A0),
+                      Color(0xFFF0E8C0),
+                      Color(0xFFFFFFFF),
+                    ],
+                    stops: [0.0, 0.35, 0.7, 1.0],
+                  )
+                : title == 'Travel PLUS'
+                    ? LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                          Color(0xFF5FA3B3),
+                          Color(0xFF7AB3C3),
+                          Color(0xFF95C3D3),
+                          Color(0xFFFFFFFF),
+                        ],
+                        stops: [0.0, 0.35, 0.7, 1.0],
+                      )
+                    : null,
+        color: (title == 'Travel BLACK' ||
+                title == 'Travel PLUS' ||
+                title == 'Travel VIP')
+            ? null
+            : Colors.white,
       ),
       child: Stack(
         children: [
@@ -631,12 +708,58 @@ class _ProfileState extends State<Profile> {
                 fit: BoxFit.contain,
               ),
             ),
+          if (title == 'Travel VIP')
+            Positioned(
+              top: 18,
+              left: 4,
+              child: Image.asset(
+                'assets/VIP.png',
+                width: 170,
+                height: 45,
+                fit: BoxFit.contain,
+              ),
+            ),
+          if (title == 'Travel PLUS')
+            Positioned(
+              top: 18,
+              left: 4,
+              child: Image.asset(
+                'assets/plus.png',
+                width: 170,
+                height: 45,
+                fit: BoxFit.contain,
+              ),
+            ),
           if (title == 'Travel BLACK')
             Positioned(
               top: 18,
               right: 4,
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          BlackPlanScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(0.0, 1.0);
+                        const end = Offset.zero;
+                        const curve = Curves.easeInOut;
+
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        var offsetAnimation = animation.drive(tween);
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
+                      transitionDuration: Duration(milliseconds: 300),
+                    ),
+                  );
+                },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.black,
                   foregroundColor: Colors.white,
@@ -656,14 +779,294 @@ class _ProfileState extends State<Profile> {
                 ),
               ),
             ),
-          if (title != 'Travel BLACK' && assetPath.endsWith('.png'))
-            Positioned.fill(
-              child: Image.asset(assetPath, fit: BoxFit.cover),
+          if (title == 'Travel VIP')
+            Positioned(
+              top: 18,
+              right: 4,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          VipPlanScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(0.0, 1.0);
+                        const end = Offset.zero;
+                        const curve = Curves.easeInOut;
+
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        var offsetAnimation = animation.drive(tween);
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
+                      transitionDuration: Duration(milliseconds: 300),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFFB5A35D),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+                  elevation: 2,
+                ),
+                child: Text(
+                  'Upgrade',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
             ),
-          // No text or overlay
+          if (title == 'Travel PLUS')
+            Positioned(
+              top: 18,
+              right: 4,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          PlusPlanScreen(),
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                        const begin = Offset(0.0, 1.0);
+                        const end = Offset.zero;
+                        const curve = Curves.easeInOut;
+
+                        var tween = Tween(begin: begin, end: end)
+                            .chain(CurveTween(curve: curve));
+                        var offsetAnimation = animation.drive(tween);
+
+                        return SlideTransition(
+                          position: offsetAnimation,
+                          child: child,
+                        );
+                      },
+                      transitionDuration: Duration(milliseconds: 300),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xFF275661),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(40),
+                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 28, vertical: 12),
+                  elevation: 2,
+                ),
+                child: Text(
+                  'Upgrade',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+              ),
+            ),
+          // Feature list content
+          Positioned(
+            top: 80,
+            left: 20,
+            right: 20,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Header
+                Text(
+                  'What\'s Included',
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'PlusJakartaSans',
+                  ),
+                ),
+                SizedBox(height: 8),
+                // Plan names header
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Text(
+                        '',
+                        style: TextStyle(
+                          color: Colors.black87,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: 'PlusJakartaSans',
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Text(
+                          'Free',
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'PlusJakartaSans',
+                          ),
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 1,
+                      child: Center(
+                        child: Text(
+                          _getPlanShortName(title),
+                          style: TextStyle(
+                            color: Colors.black87,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'PlusJakartaSans',
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 6),
+                // Feature rows
+                ..._getFeaturesForPlan(title),
+                SizedBox(height: 20),
+                // "See all features" button
+                Center(
+                  child: Text(
+                    'See all features!',
+                    style: TextStyle(
+                      color: _getPlanColor(title),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'PlusJakartaSans',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
+  }
+
+  List<Widget> _getFeaturesForPlan(String planTitle) {
+    List<Map<String, dynamic>> features = [];
+
+    if (planTitle == 'Travel PLUS') {
+      features = [
+        {'name': 'Unlimited Likes', 'free': false, 'plus': true},
+        {'name': 'Unlimited Rewinds', 'free': false, 'plus': true},
+        {'name': 'Passport', 'free': false, 'plus': true},
+      ];
+    } else if (planTitle == 'Travel BLACK') {
+      features = [
+        {'name': 'See Who Likes You', 'free': false, 'black': true},
+        {'name': 'Top Picks', 'free': false, 'black': true},
+        {'name': 'Free Super Likes', 'free': false, 'black': true},
+      ];
+    } else if (planTitle == 'Travel VIP') {
+      features = [
+        {'name': 'Priority Likes', 'free': false, 'vip': true},
+        {'name': 'Pre-Match Chat', 'free': false, 'vip': true},
+        {'name': 'See Who Likes You', 'free': false, 'vip': true},
+      ];
+    }
+
+    return features.map((feature) {
+      String planKey = planTitle == 'Travel PLUS'
+          ? 'plus'
+          : planTitle == 'Travel BLACK'
+              ? 'black'
+              : 'vip';
+      bool isIncluded = feature[planKey] ?? false;
+
+      return Padding(
+        padding: EdgeInsets.symmetric(vertical: 2),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 3,
+              child: Text(
+                feature['name'],
+                style: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 14,
+                  fontFamily: 'PlusJakartaSans',
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Center(
+                child: Text(
+                  '✗',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              flex: 1,
+              child: Center(
+                child: Text(
+                  isIncluded ? '✓' : '✗',
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }).toList();
+  }
+
+  Color _getPlanColor(String planTitle) {
+    switch (planTitle) {
+      case 'Travel PLUS':
+        return Color(0xFF275661);
+      case 'Travel BLACK':
+        return Colors.black;
+      case 'Travel VIP':
+        return Color(0xFFB5A35D);
+      default:
+        return Colors.black;
+    }
+  }
+
+  String _getPlanShortName(String planTitle) {
+    switch (planTitle) {
+      case 'Travel PLUS':
+        return 'Plus';
+      case 'Travel BLACK':
+        return 'Black';
+      case 'Travel VIP':
+        return 'VIP';
+      default:
+        return '';
+    }
   }
 
   Widget _buildSettingsTile({
@@ -712,6 +1115,78 @@ class _ProfileState extends State<Profile> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFeatureBox({
+    required String title,
+    String? subtitle,
+    required IconData icon,
+  }) {
+    return Container(
+      height: 110,
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.08),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: Colors.white.withOpacity(0.1),
+          width: 1,
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: () {
+            // Handle feature box tap
+          },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // TM.png image at the top
+              Image.asset(
+                'assets/TM.png',
+                width: 40,
+                height: 40,
+                fit: BoxFit.contain,
+              ),
+              SizedBox(height: 8),
+              // Title text
+              Text(
+                title,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  fontFamily: 'PlusJakartaSans',
+                ),
+                textAlign: TextAlign.center,
+              ),
+              if (subtitle != null) ...[
+                SizedBox(height: 4),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.7),
+                    fontSize: 12,
+                    fontFamily: 'PlusJakartaSans',
+                  ),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
             ],
           ),
         ),

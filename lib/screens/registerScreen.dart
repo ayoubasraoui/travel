@@ -370,8 +370,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(CupertinoIcons.mail_solid,
-                                      color: Colors.black87, size: 24),
+                                  Image.asset('assets/icons/google_logo.png',
+                                      width: 24, height: 24),
                                   SizedBox(width: 8),
                                   Text(
                                     'Google',
@@ -396,8 +396,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(CupertinoIcons.device_phone_portrait,
-                                      color: Colors.black87, size: 24),
+                                  Image.asset('assets/icons/apple.png',
+                                      width: 24, height: 24),
                                   SizedBox(width: 8),
                                   Text(
                                     'Apple',

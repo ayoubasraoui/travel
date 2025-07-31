@@ -90,6 +90,11 @@ flutter:
      - assets/icons/apple.png
      - assets/icons/google.png
      - assets/black.png
+     - assets/plus.png
+     - assets/VIP.png
+     - assets/subs.png
+     - assets/TM.png
+     - assets/planeblack.png
      
   #  - images/a_dot_ham.jpeg
 
