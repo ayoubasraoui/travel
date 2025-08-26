@@ -425,6 +425,7 @@ import 'package:flutter2/services/posts.dart';
 import 'dart:math';
 import 'package:flutter2/services/profile.dart';
 import 'package:flutter2/services/likes.dart';
+import 'package:flutter2/services/match.dart';
 
 class CardView extends StatelessWidget {
   final String image;
@@ -967,8 +968,7 @@ class _SwiperScreenState extends State<SwiperScreen> {
     );
   }
 
-  Widget _buildNavButton(String icon, VoidCallback onPressed,
-      {bool isActive = false}) {
+  Widget _buildNavButton(String icon, VoidCallback onPressed) {
     return IconButton(
       icon: ImageIcon(
         AssetImage(icon),
@@ -983,6 +983,28 @@ class _SwiperScreenState extends State<SwiperScreen> {
       int previousIndex, int targetIndex, SwiperActivity activity) {
     if (activity is Swipe) {
       HapticFeedback.mediumImpact();
+
+      final dir = activity.direction.toString().toLowerCase();
+      final bool isLeft = dir.contains('left');
+
+      if (!isLeft) return; // only react to LEFT
+
+      if (previousIndex >= 0 && previousIndex < extendedProfiles.length) {
+        final profile = extendedProfiles[previousIndex];
+
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (c, a1, a2) => MatchScreen(
+              userName: profile['name'],
+              userImage: profile['image'],
+            ),
+            transitionsBuilder: (c, anim, a2, child) =>
+                FadeTransition(opacity: anim, child: child),
+            transitionDuration: const Duration(milliseconds: 220),
+          ),
+        );
+      }
     }
   }
 

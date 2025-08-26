@@ -204,11 +204,16 @@
 // }
 
 import 'package:flutter/material.dart';
-import 'package:flutter2/Profile/ProfileSettings.dart';
+// import 'package:flutter2/Profile/ProfileSettings.dart';
+import 'package:flutter2/services/profile attributes/accountSettings.dart';
+import 'package:flutter2/services/profile attributes/appSettings.dart';
 import 'package:flutter2/screens/loginScreen.dart';
-import 'package:flutter2/screens/swipeScreen.dart';
-import 'package:flutter2/services/likes.dart';
-import 'package:flutter2/services/posts.dart';
+import 'package:flutter2/services/profile%20attributes/Privacy.dart';
+import 'package:flutter2/services/profile%20attributes/helpAndsupport.dart';
+// import 'package:flutter2/screens/swipeScreen.dart';
+// import 'package:flutter2/services/likes.dart';
+import 'package:flutter2/services/profile%20attributes/subscriptionSettings.dart';
+import 'package:flutter2/services/profile%20attributes/termsAndconditions.dart';
 import 'package:flutter2/services/profile.dart';
 
 class ProfileAtt extends StatefulWidget {
@@ -217,34 +222,14 @@ class ProfileAtt extends StatefulWidget {
 }
 
 class _ProfileState extends State<ProfileAtt> {
-  int _currentIndex = 2; // Profile tab index (assuming it's the last tab)
+  // Simple local preferences for sheets
+  bool _notifPush = true;
+  bool _notifEmail = true;
+  bool _notifSms = false;
+  String _language = 'English';
+  String _theme = 'Dark';
 
-  final String userName = "Jane Doe";
-  final int age = 22;
-  final String location = "New York, USA";
-  final String bio = "Adventure seeker | Coffee lover | Tech enthusiast";
-
-  void _onTabTapped(int index) {
-    if (index != _currentIndex) {
-      switch (index) {
-        case 0:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => SwiperScreen()),
-          );
-          break;
-        case 1:
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => LikeScreen()),
-          );
-          break;
-        case 2:
-          // Already on profile screen
-          break;
-      }
-    }
-  }
+  // Removed unused _currentIndex and navigation helpers
 
   void _showLogoutDialog(BuildContext context) {
     showDialog(
@@ -301,23 +286,6 @@ class _ProfileState extends State<ProfileAtt> {
     );
   }
 
-  Widget _buildNavButton(String icon, VoidCallback onPressed) {
-    return Container(
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.transparent,
-      ),
-      child: IconButton(
-        icon: ImageIcon(
-          AssetImage(icon),
-          color: Colors.white,
-          size: 26,
-        ),
-        onPressed: onPressed,
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -369,16 +337,37 @@ class _ProfileState extends State<ProfileAtt> {
                   ),
                   child: Column(
                     children: [
+                      // _buildSettingsTile(
+                      //   icon: Icons.person,
+                      //   title: 'Profile settings',
+                      //   onTap: () {},
+                      // ),
+                      // Divider(height: 1, color: Colors.white12),
                       _buildSettingsTile(
-                        icon: Icons.person,
-                        title: 'Profile settings',
-                        onTap: () {},
+                        icon: Icons.lock_outline,
+                        title: 'Account settings',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const AccountSettingsScreen(),
+                            ),
+                          );
+                        },
                       ),
                       Divider(height: 1, color: Colors.white12),
                       _buildSettingsTile(
                         icon: Icons.settings,
                         title: 'App settings',
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AppSettingsScreen(),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -403,25 +392,33 @@ class _ProfileState extends State<ProfileAtt> {
                       _buildSettingsTile(
                         icon: Icons.subscriptions,
                         title: 'Subscription',
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const SubscriptionSettingsScreen(),
+                            ),
+                          );
+                        },
                       ),
                       Divider(height: 1, color: Colors.white12),
                       _buildSettingsTile(
                         icon: Icons.notifications,
                         title: 'Notifications',
-                        onTap: () {},
+                        onTap: _showNotificationsSheet,
                       ),
                       Divider(height: 1, color: Colors.white12),
                       _buildSettingsTile(
                         icon: Icons.language,
                         title: 'Language',
-                        onTap: () {},
+                        onTap: _showLanguageSheet,
                       ),
                       Divider(height: 1, color: Colors.white12),
                       _buildSettingsTile(
                         icon: Icons.palette,
                         title: 'Theme',
-                        onTap: () {},
+                        onTap: _showThemeSheet,
                       ),
                     ],
                   ),
@@ -446,19 +443,42 @@ class _ProfileState extends State<ProfileAtt> {
                       _buildSettingsTile(
                         icon: Icons.description,
                         title: 'Terms and conditions',
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const TermsAndConditionsScreen(),
+                            ),
+                          );
+                        },
                       ),
                       Divider(height: 1, color: Colors.white12),
                       _buildSettingsTile(
                         icon: Icons.privacy_tip,
                         title: 'Privacy policy',
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const PrivacyPolicyScreen(),
+                            ),
+                          );
+                        },
                       ),
                       Divider(height: 1, color: Colors.white12),
                       _buildSettingsTile(
                         icon: Icons.help_outline,
                         title: 'Help & Support',
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  const HelpAndSupportScreen(),
+                            ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -504,6 +524,227 @@ class _ProfileState extends State<ProfileAtt> {
         ),
       ),
       bottomNavigationBar: SizedBox.shrink(),
+    );
+  }
+
+  void _showNotificationsSheet() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF23242A),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      isScrollControlled: false,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+          child: StatefulBuilder(
+            builder: (context, setModalState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Notifications',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 12),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Push notifications',
+                        style: TextStyle(color: Colors.white)),
+                    value: _notifPush,
+                    onChanged: (v) => setModalState(() => _notifPush = v),
+                    activeColor: Colors.white,
+                    activeTrackColor: const Color(0xFF43716C),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('Email notifications',
+                        style: TextStyle(color: Colors.white)),
+                    value: _notifEmail,
+                    onChanged: (v) => setModalState(() => _notifEmail = v),
+                    activeColor: Colors.white,
+                    activeTrackColor: const Color(0xFF43716C),
+                  ),
+                  SwitchListTile(
+                    contentPadding: EdgeInsets.zero,
+                    title: const Text('SMS notifications',
+                        style: TextStyle(color: Colors.white)),
+                    value: _notifSms,
+                    onChanged: (v) => setModalState(() => _notifSms = v),
+                    activeColor: Colors.white,
+                    activeTrackColor: const Color(0xFF43716C),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Cancel'),
+                      ),
+                      const Spacer(),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() {});
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('Notification settings updated')),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF43716C),
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text('Save'),
+                      ),
+                    ],
+                  )
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  void _showLanguageSheet() {
+    final List<String> options = [
+      'English',
+      'Spanish',
+      'French',
+      'German',
+      'Arabic'
+    ];
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF23242A),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        String temp = _language;
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+          child: StatefulBuilder(
+            builder: (context, setModalState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Language',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  ...options.map((lang) => RadioListTile<String>(
+                        contentPadding: EdgeInsets.zero,
+                        value: lang,
+                        groupValue: temp,
+                        onChanged: (v) => setModalState(() => temp = v!),
+                        title: Text(lang,
+                            style: const TextStyle(color: Colors.white)),
+                        activeColor: const Color(0xFF43716C),
+                      )),
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Cancel'),
+                      ),
+                      const Spacer(),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() => _language = temp);
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text('Language set to $_language')),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF43716C),
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text('Apply'),
+                      ),
+                    ],
+                  )
+                ],
+              );
+            },
+          ),
+        );
+      },
+    );
+  }
+
+  void _showThemeSheet() {
+    final List<String> options = ['Light', 'Dark', 'Auto'];
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: const Color(0xFF23242A),
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+      ),
+      builder: (context) {
+        String temp = _theme;
+        return Padding(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+          child: StatefulBuilder(
+            builder: (context, setModalState) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Theme',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  ...options.map((theme) => RadioListTile<String>(
+                        contentPadding: EdgeInsets.zero,
+                        value: theme,
+                        groupValue: temp,
+                        onChanged: (v) => setModalState(() => temp = v!),
+                        title: Text(theme,
+                            style: const TextStyle(color: Colors.white)),
+                        activeColor: const Color(0xFF43716C),
+                      )),
+                  Row(
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: const Text('Cancel'),
+                      ),
+                      const Spacer(),
+                      ElevatedButton(
+                        onPressed: () {
+                          setState(() => _theme = temp);
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Theme set to $_theme')),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF43716C),
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text('Apply'),
+                      ),
+                    ],
+                  )
+                ],
+              );
+            },
+          ),
+        );
+      },
     );
   }
 
