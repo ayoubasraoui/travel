@@ -24,10 +24,7 @@ TravelMatch is a modern Flutter app for travelers to discover like-minded people
 
 ## Screenshots
 
-| Login | Register | Swipe |
-|------|----------|-------|
-| ![Login](assets/screenshots/phonelogin.png) | ![Register](assets/screenshots/phoneregister.png) | ![Swipe](assets/screenshots/phoneswipe.png) |
+| Login | Register | Swipe | Matches and Chats |
+|----------|----------|----------|----------|
+| ![Login](assets/screenshots/phonelogin.png) | ![Register](assets/screenshots/phoneregister.png) | ![Swipe](assets/screenshots/phoneswipe.png) | ![Profile](assets/screenshots/phonechat.png) |
 
-| Matches and Chats |
-|-----------------------------|
-| ![Profile](assets/screenshots/phonechat.png) |
