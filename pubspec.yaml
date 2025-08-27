@@ -72,6 +72,12 @@ flutter:
      - assets/profile2.jpg
      - assets/profile3.jpg
      - assets/profile4.jpg
+     - assets/profile5.jpg
+     - assets/profile6.jpg
+     - assets/profile7.jpg
+     - assets/profile8.jpg
+     - assets/profile9.jpg
+     - assets/profile10.jpg
      - assets/icons/mail_icon.png
      - assets/icons/lock_icon.png
      - assets/icons/password_icon.svg

@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter2/services/user_profile_screen.dart';
 
 class ChatRoomScreen extends StatefulWidget {
   final String userName;
   final String userImage;
+  final String? age;
+  final String? location;
+  final String? bio;
+  final List<String>? interests;
 
-  ChatRoomScreen({required this.userName, required this.userImage});
+  ChatRoomScreen(
+      {required this.userName,
+      required this.userImage,
+      this.age,
+      this.location,
+      this.bio,
+      this.interests});
 
   @override
   _ChatRoomScreenState createState() => _ChatRoomScreenState();
@@ -52,32 +63,53 @@ class _ChatRoomScreenState extends State<ChatRoomScreen> {
                       icon: Icon(Icons.arrow_back, color: Colors.white),
                       onPressed: () => Navigator.pop(context),
                     ),
-                    CircleAvatar(
-                      radius: 20,
-                      backgroundImage: AssetImage(widget.userImage),
-                    ),
-                    SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.userName,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontFamily: 'PlusJakartaSans',
-                            fontWeight: FontWeight.bold,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => UserProfileScreen(
+                              userName: widget.userName,
+                              userImage: widget.userImage,
+                              age: widget.age ?? '',
+                              location: widget.location ?? '',
+                              bio: widget.bio ?? '',
+                              interests: widget.interests ?? const [],
+                            ),
                           ),
-                        ),
-                        Text(
-                          'Online',
-                          style: TextStyle(
-                            color: Colors.green,
-                            fontSize: 12,
-                            fontFamily: 'PlusJakartaSans',
+                        );
+                      },
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 20,
+                            backgroundImage: AssetImage(widget.userImage),
                           ),
-                        ),
-                      ],
+                          SizedBox(width: 12),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.userName,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 18,
+                                  fontFamily: 'PlusJakartaSans',
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Text(
+                                'Online',
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontSize: 12,
+                                  fontFamily: 'PlusJakartaSans',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

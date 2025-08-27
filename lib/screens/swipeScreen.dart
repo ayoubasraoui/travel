@@ -426,6 +426,7 @@ import 'dart:math';
 import 'package:flutter2/services/profile.dart';
 import 'package:flutter2/services/likes.dart';
 import 'package:flutter2/services/match.dart';
+import 'package:flutter2/data/demo_users.dart';
 
 class CardView extends StatelessWidget {
   final String image;
@@ -751,46 +752,10 @@ class SwiperScreen extends StatefulWidget {
 }
 
 class _SwiperScreenState extends State<SwiperScreen> {
-  final List<Map<String, dynamic>> profiles = [
-    {
-      'image': 'assets/profile1.jpg',
-      'name': 'Jane Doe',
-      'age': '22',
-      'location': 'New York, USA',
-      'bio':
-          'Adventure seeker and photography enthusiast. Looking for travel buddies to explore new destinations!',
-      'interests': ['Adventure', 'Photography', 'Culture', 'Food', 'Hiking'],
-    },
-    {
-      'image': 'assets/profile2.jpg',
-      'name': 'John Smith',
-      'age': '28',
-      'location': 'London, UK',
-      'bio':
-          'Travel blogger and coffee addict. Always planning the next adventure!',
-      'interests': ['Coffee', 'Blogging', 'Adventure', 'City Walks'],
-    },
-    {
-      'image': 'assets/profile3.jpg',
-      'name': 'Alice Johnson',
-      'age': '25',
-      'location': 'Paris, France',
-      'bio':
-          'Art lover and foodie. Seeking companions for museum tours and culinary adventures.',
-      'interests': ['Art', 'Food', 'Museums', 'Wine Tasting'],
-    },
-    {
-      'image': 'assets/profile4.jpg',
-      'name': 'Joe Jain',
-      'age': '28',
-      'location': 'Mumbai, India',
-      'bio':
-          'Tech nomad working remotely. Love exploring local markets and street food.',
-      'interests': ['Technology', 'Street Food', 'Markets', 'Remote Work'],
-    },
-  ];
+  final List<Map<String, dynamic>> profiles = demoUsers;
 
   late List<Map<String, dynamic>> extendedProfiles;
+
   final AppinioSwiperController _controller = AppinioSwiperController();
 
   @override

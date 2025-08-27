@@ -4,49 +4,73 @@ import 'package:flutter2/services/chatRoomScreen.dart';
 import 'package:flutter2/services/likes.dart';
 import 'package:flutter2/services/posts.dart';
 import 'package:flutter2/services/profile.dart';
-import 'package:flutter2/services/search.dart';
+import 'package:flutter2/data/demo_users.dart'; // <-- shared users
 
 class MessagingScreen extends StatelessWidget {
+  // Demo users (shared across app)
+  final List<Map<String, dynamic>> users = demoUsers;
+
+  // Shared sizing for BOTH the "+99 Likes" tile and user avatars
+  static const double kPeopleTileSize = 96; // change once to resize all squares
+  static const double kPeopleTileRadius = 14;
+  static const double kPeopleTileGap = 8; // tighter spacing between tiles
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF181A20),
+      backgroundColor: const Color(0xFF181A20),
       body: SafeArea(
         child: Container(
-          color: Color(0xFF181A20),
+          color: const Color(0xFF181A20),
           child: Column(
             children: [
-              // Top Bar with Title
+              // Top Bar
               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Image.asset(
-                      'assets/icons/logo.png',
-                      width: 70,
-                    ),
+                    Image.asset('assets/icons/logo.png', width: 70),
                     IconButton(
-                      icon: Icon(Icons.search, color: Colors.white),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => SearchScreen()),
+                      icon: const Icon(Icons.search, color: Colors.white),
+                      onPressed: () async {
+                        // Open in-app search that filters both "Your people" and "Messages"
+                        final selected =
+                            await showSearch<Map<String, dynamic>?>(
+                          context: context,
+                          delegate: UserSearchDelegate(users),
                         );
+                        if (selected != null && context.mounted) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => ChatRoomScreen(
+                                userName: selected['name'],
+                                userImage: selected['image'],
+                                age: selected['age'],
+                                location: selected['location'],
+                                bio: selected['bio'],
+                                interests:
+                                    List<String>.from(selected['interests']),
+                              ),
+                            ),
+                          );
+                        }
                       },
                     ),
                   ],
                 ),
               ),
 
-              // Your People Section
+              // =========================
+              //       Your People
+              // =========================
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    const Text(
                       'Your people',
                       style: TextStyle(
                         color: Colors.white,
@@ -55,102 +79,85 @@ class MessagingScreen extends StatelessWidget {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(height: 16),
+                    const SizedBox(height: 16),
+
+                    // Height = square tile + label below
                     SizedBox(
-                      height: 110,
+                      height: kPeopleTileSize + 34,
                       child: ListView(
                         scrollDirection: Axis.horizontal,
+                        padding: EdgeInsets.zero,
                         children: [
-                          // Likes Card
-                          Container(
-                            width: 80,
-                            margin: const EdgeInsets.only(right: 12),
-                            decoration: BoxDecoration(
-                              color: Color(0xFF23242A),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.white24),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  padding: EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white.withOpacity(0.1),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Text(
-                                    '+99',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 8),
-                                Text(
-                                  'Likes',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontFamily: 'PlusJakartaSans',
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          // Profile Cards
-                          ...List.generate(
-                            10,
-                            (index) => Container(
-                              margin: EdgeInsets.only(right: 12),
+                          // Likes tile (SAME SIZE as avatars)
+                          _peopleTile(
+                            child: Center(
                               child: Column(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  Stack(
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(12),
-                                        child: Container(
-                                          width: 80,
-                                          height: 80,
-                                          child: Image.asset(
-                                            'assets/profile3.jpg',
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
+                                  Container(
+                                    padding: const EdgeInsets.all(8),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white.withOpacity(0.10),
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: const Text(
+                                      '+99',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                      if (index < 3)
-                                        Positioned(
-                                          right: 0,
-                                          bottom: 0,
-                                          child: Container(
-                                            width: 16,
-                                            height: 16,
-                                            decoration: BoxDecoration(
-                                              color: Colors.green,
-                                              shape: BoxShape.circle,
-                                              border: Border.all(
-                                                color: Color(0xFF084C61),
-                                                width: 2,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                  SizedBox(height: 4),
-                                  Text(
-                                    'Jane',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontFamily: 'PlusJakartaSans',
                                     ),
                                   ),
                                 ],
                               ),
                             ),
+                            label: 'Likes',
+                            onTap: () {
+                              Navigator.pushReplacement(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (c, a, s) => LikeScreen(),
+                                  transitionsBuilder: (c, a, s, child) =>
+                                      FadeTransition(opacity: a, child: child),
+                                  transitionDuration:
+                                      const Duration(milliseconds: 200),
+                                ),
+                              );
+                            },
                           ),
+
+                          // Profile tiles (SAME SIZE)
+                          ...List.generate(users.length, (index) {
+                            final u = users[index];
+                            return _peopleTile(
+                              child: ClipRRect(
+                                borderRadius:
+                                    BorderRadius.circular(kPeopleTileRadius),
+                                child: Image.asset(
+                                  u['image'],
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              label: u['name'].toString().split(' ').first,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ChatRoomScreen(
+                                      userName: u['name'],
+                                      userImage: u['image'],
+                                      age: u['age'],
+                                      location: u['location'],
+                                      bio: u['bio'],
+                                      interests:
+                                          List<String>.from(u['interests']),
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }),
                         ],
                       ),
                     ),
@@ -158,12 +165,14 @@ class MessagingScreen extends StatelessWidget {
                 ),
               ),
 
-              // Messages Section
+              // =========================
+              //         Messages
+              // =========================
               Expanded(
                 child: Container(
-                  margin: EdgeInsets.only(top: 24),
-                  padding: EdgeInsets.only(top: 24),
-                  decoration: BoxDecoration(
+                  margin: const EdgeInsets.only(top: 8),
+                  padding: const EdgeInsets.only(top: 24),
+                  decoration: const BoxDecoration(
                     color: Color(0xFF181A20),
                     borderRadius:
                         BorderRadius.vertical(top: Radius.circular(30)),
@@ -171,8 +180,8 @@ class MessagingScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                      const Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 16),
                         child: Text(
                           'Messages',
                           style: TextStyle(
@@ -183,11 +192,12 @@ class MessagingScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(height: 16),
+                      const SizedBox(height: 16),
                       Expanded(
                         child: ListView.builder(
-                          itemCount: 20,
+                          itemCount: users.length,
                           itemBuilder: (context, index) {
+                            final user = users[index];
                             return Column(
                               children: [
                                 InkWell(
@@ -196,8 +206,13 @@ class MessagingScreen extends StatelessWidget {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => ChatRoomScreen(
-                                          userName: 'Jane',
-                                          userImage: 'assets/profile3.jpg',
+                                          userName: user['name'],
+                                          userImage: user['image'],
+                                          age: user['age'],
+                                          location: user['location'],
+                                          bio: user['bio'],
+                                          interests: List<String>.from(
+                                              user['interests']),
                                         ),
                                       ),
                                     );
@@ -207,38 +222,17 @@ class MessagingScreen extends StatelessWidget {
                                         horizontal: 16, vertical: 8),
                                     child: Row(
                                       children: [
-                                        Stack(
-                                          children: [
-                                            ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                              child: Image.asset(
-                                                'assets/profile3.jpg',
-                                                width: 50,
-                                                height: 50,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                            if (index < 3)
-                                              Positioned(
-                                                right: 0,
-                                                bottom: 0,
-                                                child: Container(
-                                                  width: 12,
-                                                  height: 12,
-                                                  decoration: BoxDecoration(
-                                                    color: Colors.green,
-                                                    shape: BoxShape.circle,
-                                                    border: Border.all(
-                                                      color: Color(0xFF0A5C75),
-                                                      width: 2,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                          ],
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(25),
+                                          child: Image.asset(
+                                            user['image'],
+                                            width: 50,
+                                            height: 50,
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
-                                        SizedBox(width: 12),
+                                        const SizedBox(width: 12),
                                         Expanded(
                                           child: Column(
                                             crossAxisAlignment:
@@ -250,8 +244,8 @@ class MessagingScreen extends StatelessWidget {
                                                         .spaceBetween,
                                                 children: [
                                                   Text(
-                                                    'Jane',
-                                                    style: TextStyle(
+                                                    user['name'],
+                                                    style: const TextStyle(
                                                       color: Colors.white,
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -269,12 +263,12 @@ class MessagingScreen extends StatelessWidget {
                                                   ),
                                                 ],
                                               ),
-                                              SizedBox(height: 4),
+                                              const SizedBox(height: 4),
                                               Row(
                                                 children: [
                                                   Expanded(
                                                     child: Text(
-                                                      'Hello there! Would you like to join...',
+                                                      'Tap to chat with ${user['name'].toString().split(' ').first}...',
                                                       style: TextStyle(
                                                         color: Colors.white
                                                             .withOpacity(0.8),
@@ -285,31 +279,6 @@ class MessagingScreen extends StatelessWidget {
                                                           TextOverflow.ellipsis,
                                                     ),
                                                   ),
-                                                  if (index < 5)
-                                                    Container(
-                                                      margin: EdgeInsets.only(
-                                                          left: 8),
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                        horizontal: 8,
-                                                        vertical: 4,
-                                                      ),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.blue,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(12),
-                                                      ),
-                                                      child: Text(
-                                                        '2',
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
                                                 ],
                                               ),
                                             ],
@@ -336,9 +305,11 @@ class MessagingScreen extends StatelessWidget {
                 ),
               ),
 
-              // Bottom Navigation Bar
+              // =========================
+              //   Bottom Navigation Bar
+              // =========================
               Padding(
-                padding: EdgeInsets.only(bottom: 16),
+                padding: const EdgeInsets.only(bottom: 16),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
@@ -346,36 +317,21 @@ class MessagingScreen extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  Profile(),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            );
-                          },
-                          transitionDuration: Duration(milliseconds: 200),
+                          pageBuilder: (c, a, s) => Profile(),
+                          transitionsBuilder: (c, a, s, child) =>
+                              FadeTransition(opacity: a, child: child),
+                          transitionDuration: const Duration(milliseconds: 200),
                         ),
                       );
                     }),
-                    // _buildNavButton('assets/icons/location pin.png', () {}),
                     _buildNavButton('assets/icons/location pin.png', () {
                       Navigator.pushReplacement(
                         context,
                         PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  SocialFeedScreen(),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            );
-                          },
-                          transitionDuration: Duration(milliseconds: 200),
+                          pageBuilder: (c, a, s) => SocialFeedScreen(),
+                          transitionsBuilder: (c, a, s, child) =>
+                              FadeTransition(opacity: a, child: child),
+                          transitionDuration: const Duration(milliseconds: 200),
                         ),
                       );
                     }),
@@ -383,22 +339,15 @@ class MessagingScreen extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  SwiperScreen(),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            );
-                          },
-                          transitionDuration: Duration(milliseconds: 200),
+                          pageBuilder: (c, a, s) => SwiperScreen(),
+                          transitionsBuilder: (c, a, s, child) =>
+                              FadeTransition(opacity: a, child: child),
+                          transitionDuration: const Duration(milliseconds: 200),
                         ),
                       );
                     }),
                     IconButton(
-                      icon: ImageIcon(
+                      icon: const ImageIcon(
                         AssetImage('assets/icons/Chat.png'),
                         color: Color(0xFF43716C),
                         size: 26,
@@ -409,17 +358,10 @@ class MessagingScreen extends StatelessWidget {
                       Navigator.pushReplacement(
                         context,
                         PageRouteBuilder(
-                          pageBuilder:
-                              (context, animation, secondaryAnimation) =>
-                                  LikeScreen(),
-                          transitionsBuilder:
-                              (context, animation, secondaryAnimation, child) {
-                            return FadeTransition(
-                              opacity: animation,
-                              child: child,
-                            );
-                          },
-                          transitionDuration: Duration(milliseconds: 200),
+                          pageBuilder: (c, a, s) => LikeScreen(),
+                          transitionsBuilder: (c, a, s, child) =>
+                              FadeTransition(opacity: a, child: child),
+                          transitionDuration: const Duration(milliseconds: 200),
                         ),
                       );
                     }),
@@ -433,9 +375,56 @@ class MessagingScreen extends StatelessWidget {
     );
   }
 
+  // =========================
+  // Helpers
+  // =========================
+  Widget _peopleTile({
+    required Widget child,
+    required String label,
+    VoidCallback? onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(right: kPeopleTileGap),
+        child: Column(
+          children: [
+            SizedBox.square(
+              dimension: kPeopleTileSize,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFF23242A),
+                  borderRadius: BorderRadius.circular(kPeopleTileRadius),
+                  border: Border.all(color: Colors.white24),
+                ),
+                clipBehavior: Clip.hardEdge,
+                child: child,
+              ),
+            ),
+            const SizedBox(height: 6),
+            SizedBox(
+              width: kPeopleTileSize,
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontFamily: 'PlusJakartaSans',
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildNavButton(String icon, VoidCallback onPressed) {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         shape: BoxShape.circle,
         color: Colors.transparent,
       ),
@@ -449,4 +438,123 @@ class MessagingScreen extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Search across both "Your people" and "Messages"
+class UserSearchDelegate extends SearchDelegate<Map<String, dynamic>?> {
+  final List<Map<String, dynamic>> users;
+  UserSearchDelegate(this.users);
+
+  @override
+  String get searchFieldLabel => 'Search people or chats';
+
+  @override
+  ThemeData appBarTheme(BuildContext context) {
+    final base = Theme.of(context);
+    return base.copyWith(
+      scaffoldBackgroundColor: const Color(0xFF181A20),
+      appBarTheme: const AppBarTheme(
+        backgroundColor: Color(0xFF181A20),
+        elevation: 0,
+        iconTheme: IconThemeData(color: Colors.white),
+      ),
+      inputDecorationTheme: const InputDecorationTheme(
+        hintStyle: TextStyle(color: Colors.white54),
+        border: InputBorder.none,
+      ),
+      textTheme: base.textTheme.apply(
+        bodyColor: Colors.white,
+        displayColor: Colors.white,
+      ),
+    );
+  }
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [
+      if (query.isNotEmpty)
+        IconButton(
+          icon: const Icon(Icons.clear),
+          onPressed: () => query = '',
+        ),
+    ];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.arrow_back),
+      onPressed: () => close(context, null),
+    );
+  }
+
+  List<Map<String, dynamic>> _filter() {
+    final q = query.trim().toLowerCase();
+    if (q.isEmpty) return users;
+    return users.where((u) {
+      final name = (u['name'] as String).toLowerCase();
+      final location = (u['location'] as String).toLowerCase();
+      final interests = (u['interests'] as List).join(' ').toLowerCase();
+      return name.contains(q) || location.contains(q) || interests.contains(q);
+    }).toList();
+  }
+
+  Widget _buildList(BuildContext context) {
+    final results = _filter();
+    if (results.isEmpty) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(24),
+          child: Text(
+            'No matches found',
+            style: TextStyle(color: Colors.white70),
+          ),
+        ),
+      );
+    }
+
+    return ListView.separated(
+      itemCount: results.length,
+      separatorBuilder: (_, __) => Divider(
+        color: Colors.white.withOpacity(0.1),
+        height: 1,
+        indent: 72,
+        endIndent: 16,
+      ),
+      itemBuilder: (context, i) {
+        final u = results[i];
+        return ListTile(
+          onTap: () => close(context, u),
+          leading: ClipRRect(
+            borderRadius: BorderRadius.circular(22),
+            child: Image.asset(
+              u['image'],
+              width: 44,
+              height: 44,
+              fit: BoxFit.cover,
+            ),
+          ),
+          title: Text(
+            u['name'],
+            style: const TextStyle(
+              color: Colors.white,
+              fontFamily: 'PlusJakartaSans',
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          subtitle: Text(
+            u['location'],
+            style: const TextStyle(color: Colors.white70),
+          ),
+          trailing: const Icon(Icons.chevron_right, color: Colors.white54),
+        );
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) => _buildList(context);
+
+  @override
+  Widget buildSuggestions(BuildContext context) => _buildList(context);
 }
